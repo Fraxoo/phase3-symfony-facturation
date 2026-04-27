@@ -3,8 +3,10 @@
 :root {
     --primary-color: #155DFC;
     --gray: #364153;
+    --secondary-gray: #4A5565;
     --white: #FFFFFF;
     --background-color: #F9FAFB;
+    --primary-bg-color: rgb(21,93,252,0.2);
 }
 
 * {
@@ -58,4 +60,12 @@
 
 .alert {
     color: red;
+}
+
+.header-input {
+    display: flex;
+    padding: 0.5rem 1rem;
+    gap: 0.5rem;
+    border-radius: 0.5rem;
+    align-items: center;
 }
