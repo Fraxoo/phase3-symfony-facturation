@@ -16,7 +16,7 @@
     }) }}
     <div class="flex gap-2">
         <div class="auth-input-div">
-            <p>Prénom</p>
+            <p class="text-(--gray)">Prénom</p>
             {{ form_widget(registrationForm.first_name , {
             'attr' : { 'class' : "auth-input" }
             }) }}
@@ -25,7 +25,7 @@
             </div>
         </div>
         <div class="auth-input-div">
-            <p>Nom</p>
+            <p class="text-(--gray)">Nom</p>
             {{ form_widget(registrationForm.last_name , {
             'attr' : { 'class' : "auth-input" }
             }) }}
@@ -35,7 +35,7 @@
         </div>
     </div>
     <div class="auth-input-div">
-        <p>Raison sociale</p>
+        <p class="text-(--gray)">Raison sociale</p>
         {{form_widget(registrationForm.company_name , {
         'attr' : { 'class' : "auth-input" }
         }) }}
@@ -44,7 +44,7 @@
         </div>
     </div>
     <div class="auth-input-div">
-        <p>IBAN</p>
+        <p class="text-(--gray)">IBAN</p>
         {{form_widget(registrationForm.iban , {
         'attr' : { 'class' : "auth-input" }
         }) }}
@@ -53,7 +53,7 @@
         </div>
     </div>
     <div class="auth-input-div">
-        <p>Adresse Email</p>
+        <p class="text-(--gray)">Adresse Email</p>
         {{ form_widget(registrationForm.email , {
         'attr' : { 'class' : "auth-input" }
         }) }}
@@ -62,7 +62,7 @@
         </div>
     </div>
     <div class="auth-input-div">
-        <p>Mot de passe</p>
+        <p class="text-(--gray)">Mot de passe</p>
         {{ form_widget(registrationForm.plainPassword , {
         'attr' : { 'class' : "auth-input" }
         }) }}

@@ -2,6 +2,7 @@
 
 :root {
     --primary-color: #155DFC;
+    --gray: #364153;
     --white: #FFFFFF;
     --background-color: #F9FAFB;
 }
@@ -52,6 +53,7 @@
     padding: 0.5rem 1rem;
     border-radius: 0.5rem;
     color: white;
+    cursor: pointer;
 }
 
 .alert {
