@@ -1,5 +1,59 @@
 @import "tailwindcss";
 
-body {
-    background-color: skyblue;
+:root {
+    --primary-color: #155DFC;
+    --white: #FFFFFF;
+    --background-color: #F9FAFB;
+}
+
+* {
+    font-family: "Arimo", sans-serif;
+}
+
+.auth-section {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    gap: 2rem;
+    background-color: var(--background-color);
+}
+
+.auth-form {
+    display: flex;
+    flex-direction: column;
+    background-color: white;
+    padding: 2rem;
+    border-radius: 0.5rem;
+    gap: 1.7rem;
+    box-shadow: rgba(0, 0, 0, 0.1) 0px 1px 3px 0px, rgba(0, 0, 0, 0.06) 0px 1px 2px 0px;
+}
+
+.auth-input {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    width: 100%;
+    box-shadow: rgba(0, 0, 0, 0.05) 0px 0px 0px 1px;
+    border: #D1D5DC 1px solid;
+    padding: 0.5rem 1rem;
+    border-radius: 0.5rem;
+}
+
+.auth-input-div{
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.blue-btn {
+    background-color: var(--primary-color);
+    padding: 0.5rem 1rem;
+    border-radius: 0.5rem;
+    color: white;
+}
+
+.alert {
+    color: red;
 }
