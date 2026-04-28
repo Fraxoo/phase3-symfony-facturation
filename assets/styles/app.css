@@ -7,10 +7,12 @@
     --gray-border: rgb(54, 65, 83, 0.2);
     --white: #FFFFFF;
     --background-color: #F9FAFB;
-    --primary-bg-color: rgb(21,93,252,0.1);
+    --primary-bg-color: rgb(21, 93, 252, 0.1);
+    --title-color: #101828CC;
+    --title-color-secondary: #101828;
 }
 
-body{
+body {
     background-color: var(--background-color);
 }
 
@@ -50,7 +52,7 @@ body{
     border-radius: 0.5rem;
 }
 
-.auth-input-div{
+.auth-input-div {
     display: flex;
     flex-direction: column;
     gap: 0.5rem;
@@ -74,4 +76,8 @@ body{
     gap: 0.5rem;
     border-radius: 0.5rem;
     align-items: center;
+}
+
+.product-list {
+    box-shadow: rgba(0, 0, 0, 0.1) 0px 1px 3px 0px, rgba(0, 0, 0, 0.06) 0px 1px 2px 0px;
 }

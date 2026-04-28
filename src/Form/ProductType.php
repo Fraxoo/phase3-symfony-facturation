@@ -14,14 +14,31 @@ class ProductType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('name')
-            ->add('description')
-            ->add('price')
-            ->add('quantity')
-            ->add('unit')
-            ->add('invoice_id', EntityType::class, [
-                'class' => Invoice::class,
-                'choice_label' => 'id',
+            ->add('name' , null , [
+                'required' => true,
+                'label' => "Nom du produit",
+                'attr' => [
+                    'placeholder' => "Ex : Clé USB 16GB"
+                ],
+            ])
+            ->add('description' , null , [
+                'required' => false,
+                'label' => "Description",
+                'attr' => [
+                    'placeholder' => "Ex : Clé USB 16GB de marque SanDisk"
+                ],
+            ])
+            ->add('price', null, [
+                'required' => true,
+                'label' => "Prix",
+                'attr' => [
+                    'placeholder' => "Ex : 19.99"
+                ]
+            ])
+            ->add('unit', null, [
+                'required' => true,
+                'label' => "Unité",
+                
             ])
         ;
     }

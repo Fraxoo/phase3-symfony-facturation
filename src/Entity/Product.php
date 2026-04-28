@@ -28,8 +28,7 @@ class Product
     #[ORM\Column(type: Types::DECIMAL, precision: 15, scale: 2)]
     private ?string $price = null;
 
-    #[ORM\Column]
-    private ?int $quantity = null;
+
 
     #[ORM\Column(enumType: Unit::class)]
     private ?Unit $unit = null;
@@ -87,17 +86,7 @@ class Product
         return $this;
     }
 
-    public function getQuantity(): ?int
-    {
-        return $this->quantity;
-    }
 
-    public function setQuantity(int $quantity): static
-    {
-        $this->quantity = $quantity;
-
-        return $this;
-    }
 
     public function getUnit(): ?Unit
     {
