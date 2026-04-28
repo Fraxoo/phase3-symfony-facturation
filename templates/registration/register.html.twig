@@ -1,0 +1,79 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Register{% endblock %}
+
+{% block body %}
+<section class="auth-section">
+    <div class="flex items-center flex-col gap-4">
+        <img class="w-15" src="{{ asset('/images/dollar.png')}}" alt="">
+        <h1 class="font-bold text-3xl">Créez votre compte</h1>
+        <h3>Ou <a class="text-(--primary-color) cursor-pointer hover:underline"
+                href="{{ path('app_login')}}">connectez-vous a votre compte</a></h3>
+    </div>
+
+    {{ form_start(registrationForm , {
+    'attr' : { 'class' : "auth-form"}
+    }) }}
+    <div class="flex gap-2">
+        <div class="auth-input-div">
+            <p class="text-(--gray)">Prénom</p>
+            {{ form_widget(registrationForm.first_name , {
+            'attr' : { 'class' : "auth-input" }
+            }) }}
+            <div class="alert">
+                {{ form_errors(registrationForm.first_name) }}
+            </div>
+        </div>
+        <div class="auth-input-div">
+            <p class="text-(--gray)">Nom</p>
+            {{ form_widget(registrationForm.last_name , {
+            'attr' : { 'class' : "auth-input" }
+            }) }}
+            <div class="alert">
+                {{ form_errors(registrationForm.last_name) }}
+            </div>
+        </div>
+    </div>
+    <div class="auth-input-div">
+        <p class="text-(--gray)">Raison sociale</p>
+        {{form_widget(registrationForm.company_name , {
+        'attr' : { 'class' : "auth-input" }
+        }) }}
+        <div class="alert">
+            {{ form_errors(registrationForm.company_name) }}
+        </div>
+    </div>
+    <div class="auth-input-div">
+        <p class="text-(--gray)">IBAN</p>
+        {{form_widget(registrationForm.iban , {
+        'attr' : { 'class' : "auth-input" }
+        }) }}
+        <div class="alert">
+            {{ form_errors(registrationForm.iban) }}
+        </div>
+    </div>
+    <div class="auth-input-div">
+        <p class="text-(--gray)">Adresse Email</p>
+        {{ form_widget(registrationForm.email , {
+        'attr' : { 'class' : "auth-input" }
+        }) }}
+        <div class="alert">
+            {{ form_errors(registrationForm.email) }}
+        </div>
+    </div>
+    <div class="auth-input-div">
+        <p class="text-(--gray)">Mot de passe</p>
+        {{ form_widget(registrationForm.plainPassword , {
+        'attr' : { 'class' : "auth-input" }
+        }) }}
+        <div class="alert">
+            {{ form_errors(registrationForm.plainPassword) }}
+        </div>
+    </div>
+
+    {{ form_errors(registrationForm) }}
+    <button type="submit" class="btn blue-btn">Créer mon compte </button>
+    {{ form_end(registrationForm) }}
+
+</section>
+{% endblock %}

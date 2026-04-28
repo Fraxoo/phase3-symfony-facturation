@@ -1,0 +1,39 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Log in!{% endblock %}
+
+{% block body %}
+<section class="auth-section">
+    <div>
+        <div class="flex items-center flex-col gap-4">
+            <img class="w-15" src="{{ asset('/images/dollar.png')}}" alt="">
+            <h1 class="font-bold text-3xl">Connectez-vous</h1>
+            <h3>Ou <a class="text-(--primary-color) cursor-pointer hover:underline"
+                    href="{{ path('app_register')}}">créez un nouveau compte gratuitement</a></h3>
+        </div>
+    </div>
+    <form class="auth-form w-1/4" method="post">
+        <div class="auth-input-div">
+            <label class="text-(--gray)" for="username">Email</label>
+            <input placeholder="Email" class="auth-input" type="email" value="{{ last_username }}" name="_username" id="username"
+                class="form-control" autocomplete="email" required autofocus>
+        </div>
+        <div class="auth-input-div">
+            <label class="text-(--gray)" for="password">Mot de passe</label>
+            <input placeholder="******" class="auth-input" type="password" name="_password" id="password" class="form-control"
+                autocomplete="current-password" required>
+        </div>
+
+        <input type="hidden" name="_csrf_token" data-controller="csrf-protection"
+            value="{{ csrf_token('authenticate') }}">
+        {% if error %}
+        <div class="alert alert-danger alert">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+        {% endif %}
+
+
+        <button class="btn btn-lg btn-primary blue-btn" type="submit">
+            Se connecter
+        </button>
+    </form>
+</section>
+{% endblock %}

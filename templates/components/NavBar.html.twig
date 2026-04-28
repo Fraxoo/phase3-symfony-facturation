@@ -1,0 +1,51 @@
+<div class="flex h-screen flex-1 border-r border-(--gray-border) flex-col justify-between">
+    <div class="flex flex-col p-6 gap-8">
+        <a href="{{ path('app_dashboard') }}" class="flex items-center px-3  gap-4">
+            <img class="w-fit" src="{{ asset('/images/dollar.png')}}" alt="">
+            <h1 class="text-(--primary-color) text-2xl font-bold">FacturSaaS</h1>
+        </a>
+       
+        <div class="flex text-(--secondary-gray) text-2xl flex-col gap-4">
+            <div
+                class="header-input {{ app.request.pathInfo == '/dashboard' ? 'bg-(--primary-bg-color) text-(--primary-color)' : '' }} ">
+
+                <i class="fa-solid fa-chart-column"></i>
+                <p>Dashboard</p>
+            </div>
+            <div class="header-input {{ app.request.pathInfo == '/dashboard/factures' ? 'bg-(--primary-bg-color) text-(--primary-color)' : '' }} ">
+                <i class="fa-regular fa-file-lines"></i>
+                <p>Factures</p>
+            </div>
+            <div class="header-input {{ app.request.pathInfo == '/dashboard/clients' ? 'bg-(--primary-bg-color) text-(--primary-color)' : '' }} ">
+                <i class="fa-solid fa-user-group"></i>
+                <p>Clients</p>
+            </div>
+            <div class="header-input {{ app.request.pathInfo == '/dashboard/produits' ? 'bg-(--primary-bg-color) text-(--primary-color)' : '' }} ">
+                <i class="fa-solid fa-box"></i>
+                <p>Produits</p>
+            </div>
+            <div class="header-input {{ app.request.pathInfo == '/dashboard/profil' ? 'bg-(--primary-bg-color) text-(--primary-color)' : '' }} ">
+                <i class="fa-solid fa-gear"></i>
+                <p>Profil</p>
+            </div>
+        </div>
+    </div>
+    <div class="flex flex-col border-t border-(--gray-border) gap-6 p-6">
+        <div class="flex gap-2  items-center">
+            <p class="bg-(--primary-bg-color) font-bold text-xl text-(--primary-color) px-3 py-2 rounded-4xl">{{ app.user ? app.user.firstName|slice(0, 1)|upper : '' }}{{ app.user ? app.user.lastName|slice(0, 1)|upper : '' }}</p>
+            <div class="flex flex-col justify-between">
+                <p class=" text-xl">
+                    {{ app.user ? app.user.getFirstName() : '' }}
+                    {{ app.user ? app.user.getLastName() : '' }}
+                </p>
+                <p class="text-(--secondary-gray)">{{app.user ? app.user.email : ''}}</p>
+            </div>
+        </div>
+        <a href="{{ path('app_logout')}}">
+            <div class="flex gap-6 text-red-600 text-xl items-center">
+                <i class="fa-solid fa-arrow-right-from-bracket"></i>
+                <p>Déconnexion</p>
+            </div>
+        </a>
+    </div>
+</div>
