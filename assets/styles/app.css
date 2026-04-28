@@ -3,10 +3,11 @@
 :root {
     --primary-color: #155DFC;
     --gray: #364153;
-    --secondary-gray: #4A5565;
+    --secondary-gray: #364153;
+    --gray-border: rgb(54, 65, 83, 0.2);
     --white: #FFFFFF;
     --background-color: #F9FAFB;
-    --primary-bg-color: rgb(21,93,252,0.2);
+    --primary-bg-color: rgb(21,93,252,0.1);
 }
 
 * {
