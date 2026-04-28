@@ -47,7 +47,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(length: 255)]
     private ?string $iban = null;
 
-    #[ORM\Column(length: 255 , nullable: true)]
+    #[ORM\Column(length: 14 , nullable: true)]
     private ?string $siret = null;
 
     /**
@@ -61,6 +61,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     #[ORM\OneToMany(targetEntity: Invoice::class, mappedBy: 'user_id')]
     private Collection $invoices;
+
+    #[ORM\Column(length: 10000, nullable: true)]
+    private ?string $cgv = null;
 
     public function __construct()
     {
@@ -259,6 +262,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
                 $invoice->setUserId(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getCgv(): ?string
+    {
+        return $this->cgv;
+    }
+
+    public function setCgv(?string $cgv): static
+    {
+        $this->cgv = $cgv;
 
         return $this;
     }

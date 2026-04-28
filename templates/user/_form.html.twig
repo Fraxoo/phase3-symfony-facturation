@@ -1,0 +1,53 @@
+{{ form_start(form , {
+'attr': {
+'class': 'auth-form w-1/2'
+}
+}) }}
+
+<div>
+    <p>Raison Sociale</p>
+    {{ form_widget(form.company_name , {
+    'attr': {
+    'class': 'auth-input'
+    }
+    }) }}
+    <div class="alert">
+        {{ form_errors(form.company_name) }}
+    </div>
+</div>
+<div>
+    <p>Numero SIRET (Optionnel)</p>
+    {{ form_widget(form.siret , {
+    'attr': {
+    'class': 'auth-input'
+    }
+    }) }}
+    <div class="alert">
+        {{ form_errors(form.siret) }}
+    </div>
+</div>
+<div>
+    <p>IBAN</p>
+    {{ form_widget(form.iban , {
+    'attr': {
+    'class': 'auth-input'
+    }
+    }) }}
+    <div class="alert">
+        {{ form_errors(form.iban) }}
+    </div>
+</div>
+<div>
+    <p>Condition Générales de Vente (CGV)</p>
+    {{ form_widget(form.cgv , {
+    'attr': {
+    'class': 'auth-input'
+    }
+    }) }}
+    <div class="alert">
+        {{ form_errors(form.cgv) }}
+    </div>
+</div>
+
+<button class="blue-btn w-fit px-8!" type="submit">Enregistrer les modifications</button>
+{{ form_end(form) }}
