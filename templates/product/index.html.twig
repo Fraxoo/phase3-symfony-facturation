@@ -1,0 +1,47 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Product index
+{% endblock %}
+
+{% block body %}
+<div class="p-8 flex flex-col gap-4">
+
+    <div class="flex justify-between">
+        <h1>Produits & Services</h1>
+        <a class="flex gap-4 items-center blue-btn" href="{{ path('app_product_new') }}">
+            <i class="fa-solid fa-plus"></i>
+            <p>Ajouter un produit</p>
+        </a>
+    </div>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Description</th>
+                <th>Price</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for product in products %}
+            <tr>
+                <td>{{ product.name }}</td>
+                <td>{{ product.description }}</td>
+                <td>{{ product.price }}</td>
+                <td class="flex gap-4 items-center">
+                    <a class="text-(--primary-color)" href="{{ path('app_product_edit', {'id': product.id}) }}"><i class="fa-solid fa-pencil"></i></a>
+                    <a class="text-red-500" href="{{ path('app_product_delete', {'id': product.id}) }}"><i class="fa-regular fa-trash-can"></i></a>
+                </td>
+            </tr>
+            {% else %}
+            <tr>
+                <td colspan="7">Aucun produit pour le moment</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+
+</div>
+{% endblock %}

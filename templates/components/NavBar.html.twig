@@ -10,10 +10,9 @@
         <div class="flex text-(--secondary-gray) text-[1.25rem] flex-col gap-4">
             <a href="{{ path('app_dashboard') }}"
                 class="header-input {{ app.request.pathInfo == '/dashboard' ? 'bg-(--primary-bg-color) text-(--primary-color)' : '' }} ">
-
                 <i class="fa-solid fa-chart-column"></i>
                 <p>Dashboard</p>
-        </a>
+            </a>
             <a href=""
                 class="header-input {{ app.request.pathInfo == '/dashboard/factures' ? 'bg-(--primary-bg-color) text-(--primary-color)' : '' }} ">
                 <i class="fa-regular fa-file-lines"></i>
@@ -24,8 +23,8 @@
                 <i class="fa-solid fa-user-group"></i>
                 <p>Clients</p>
             </a>
-            <a href=""
-                class="header-input {{ app.request.pathInfo == '/dashboard/produits' ? 'bg-(--primary-bg-color) text-(--primary-color)' : '' }} ">
+            <a href="{{ path('app_product_index') }}"
+                class="header-input {{ app.request.pathInfo == '/product' ? 'bg-(--primary-bg-color) text-(--primary-color)' : '' }} ">
                 <i class="fa-solid fa-box"></i>
                 <p>Produits</p>
             </a>
