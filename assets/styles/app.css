@@ -10,6 +10,11 @@
     --primary-bg-color: rgb(21,93,252,0.1);
 }
 
+body{
+    background-color: var(--background-color);
+}
+
+
 * {
     font-family: "Arimo", sans-serif;
 }
@@ -27,7 +32,7 @@
 .auth-form {
     display: flex;
     flex-direction: column;
-    background-color: white;
+    background-color: #ffffff;
     padding: 2rem;
     border-radius: 0.5rem;
     gap: 1.7rem;

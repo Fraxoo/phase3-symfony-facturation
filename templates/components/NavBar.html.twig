@@ -1,38 +1,46 @@
-<div class="flex h-screen flex-1 border-r border-(--gray-border) flex-col justify-between">
+{% block content %}
+
+<div class="flex h-screen bg-white flex-1 border-r border-(--gray-border) flex-col justify-between">
     <div class="flex flex-col p-6 gap-8">
         <a href="{{ path('app_dashboard') }}" class="flex items-center px-3  gap-4">
             <img class="w-fit" src="{{ asset('/images/dollar.png')}}" alt="">
-            <h1 class="text-(--primary-color) text-2xl font-bold">FacturSaaS</h1>
+            <h1 class="text-(--primary-color) text-[1.25rem] font-bold">FacturSaaS</h1>
         </a>
-       
-        <div class="flex text-(--secondary-gray) text-2xl flex-col gap-4">
-            <div
+
+        <div class="flex text-(--secondary-gray) text-[1.25rem] flex-col gap-4">
+            <a href="{{ path('app_dashboard') }}"
                 class="header-input {{ app.request.pathInfo == '/dashboard' ? 'bg-(--primary-bg-color) text-(--primary-color)' : '' }} ">
 
                 <i class="fa-solid fa-chart-column"></i>
                 <p>Dashboard</p>
-            </div>
-            <div class="header-input {{ app.request.pathInfo == '/dashboard/factures' ? 'bg-(--primary-bg-color) text-(--primary-color)' : '' }} ">
+        </a>
+            <a href=""
+                class="header-input {{ app.request.pathInfo == '/dashboard/factures' ? 'bg-(--primary-bg-color) text-(--primary-color)' : '' }} ">
                 <i class="fa-regular fa-file-lines"></i>
                 <p>Factures</p>
-            </div>
-            <div class="header-input {{ app.request.pathInfo == '/dashboard/clients' ? 'bg-(--primary-bg-color) text-(--primary-color)' : '' }} ">
+            </a>
+            <a href=""
+                class="header-input {{ app.request.pathInfo == '/dashboard/clients' ? 'bg-(--primary-bg-color) text-(--primary-color)' : '' }} ">
                 <i class="fa-solid fa-user-group"></i>
                 <p>Clients</p>
-            </div>
-            <div class="header-input {{ app.request.pathInfo == '/dashboard/produits' ? 'bg-(--primary-bg-color) text-(--primary-color)' : '' }} ">
+            </a>
+            <a href=""
+                class="header-input {{ app.request.pathInfo == '/dashboard/produits' ? 'bg-(--primary-bg-color) text-(--primary-color)' : '' }} ">
                 <i class="fa-solid fa-box"></i>
                 <p>Produits</p>
-            </div>
-            <div class="header-input {{ app.request.pathInfo == '/dashboard/profil' ? 'bg-(--primary-bg-color) text-(--primary-color)' : '' }} ">
+            </a>
+            <a href="{{ path('app_user_edit' , {'id': app.user.id}) }}"
+                class="header-input {{ app.request.pathInfo == '/user/' ~ app.user.id ~ '/edit' ? 'bg-(--primary-bg-color) text-(--primary-color)' : '' }} ">
                 <i class="fa-solid fa-gear"></i>
                 <p>Profil</p>
-            </div>
+            </a>
         </div>
     </div>
     <div class="flex flex-col border-t border-(--gray-border) gap-6 p-6">
         <div class="flex gap-2  items-center">
-            <p class="bg-(--primary-bg-color) font-bold text-xl text-(--primary-color) px-3 py-2 rounded-4xl">{{ app.user ? app.user.firstName|slice(0, 1)|upper : '' }}{{ app.user ? app.user.lastName|slice(0, 1)|upper : '' }}</p>
+            <p class="bg-(--primary-bg-color) font-bold text-xl text-(--primary-color) px-3 py-2 ">{{
+                app.user ? app.user.firstName|slice(0, 1)|upper : '' }}{{ app.user ? app.user.lastName|slice(0, 1)|upper
+                : '' }}</p>
             <div class="flex flex-col justify-between">
                 <p class=" text-xl">
                     {{ app.user ? app.user.getFirstName() : '' }}
@@ -49,3 +57,4 @@
         </a>
     </div>
 </div>
+{% endblock %}
