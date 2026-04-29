@@ -1,0 +1,19 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Client index{% endblock %}
+
+{% block body %}
+<div class="p-8 flex flex-col gap-4 overflow-scroll h-screen">
+    <div class="flex justify-between">
+        <h1 class="text-[24px] font-bold text-(--title-color-secondary)">Clients</h1>
+        <a class="flex gap-4 items-center blue-btn" href="{{ path('app_client_new') }}">
+            <i class="fa-solid fa-plus"></i>
+            <p>Ajouter un client</p>
+        </a>
+    </div>
+    
+    <twig:ClientList clients="{{ clients }}" />
+</div>
+
+
+{% endblock %}

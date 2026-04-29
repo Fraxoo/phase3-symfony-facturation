@@ -86,8 +86,79 @@ body {
     align-items: center;
 }
 
-.product-list {
+.product-list,
+.table-card {
     box-shadow: rgba(0, 0, 0, 0.1) 0px 1px 3px 0px, rgba(0, 0, 0, 0.06) 0px 1px 2px 0px;
+    border-radius: 1rem;
+    padding: 0.5rem;
+}
+
+.product-list th,
+.product-list td,
+.table-card th,
+.table-card td {
+    padding: 1rem 1.5rem;
+}
+
+.table-head {
+    border-bottom: 1px solid #000;
+}
+
+.table-card th,
+.product-list th {
+    text-align: left;
+}
+
+.table-card .table-cell-center,
+.product-list .table-cell-center {
+    text-align: center;
+}
+
+.table-card .table-cell-right,
+.product-list .table-cell-right {
+    text-align: right;
+}
+
+.table-row {
+    background-color: var(--white);
+    border-top: 1px solid var(--gray-border);
+    transition: background-color 150ms ease-in-out;
+}
+
+.table-row:hover {
+    background-color: var(--primary-bg-color);
+}
+
+.table-actions {
+    display: flex;
+    gap: 1rem;
+    justify-content: flex-end;
+    align-items: center;
+	width: 100%;
+}
+
+.table-actions-cell {
+	vertical-align: middle;
+}
+
+.table-action {
+    text-decoration: none;
+}
+
+.table-action-edit {
+    color: var(--primary-color);
+}
+
+.table-action-delete {
+    color: #ef4444;
+    background: transparent;
+    border: 0;
+    padding: 0;
+    cursor: pointer;
+}
+
+.table-empty {
+    text-align: center;
 }
 
 .form{

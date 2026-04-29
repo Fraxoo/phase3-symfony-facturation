@@ -1,0 +1,25 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}New Client{% endblock %}
+
+{% block body %}
+<div class="flex flex-col h-screen justify-between gap-12 overflow-scroll p-8">
+    <div class="flex flex-col gap-4 items-center">
+        <h1 class="uppercase text-[24px] text-(--title-color) font-bold">Ajouter un nouveau client</h1>
+
+        <div class="auth-form w-1/3">
+            <div class="flex justify-between">
+                <h3 class="font-bold text-[20px]">Nouveau Client</h3>
+                <a href="{{ path('app_client_index')}}"><i class="fa-solid fa-xmark"></i></a>
+            </div>
+            {{ include('client/_form.html.twig') }}
+        </div>
+    </div>
+    <div class="flex flex-col  gap-4 ">
+        <h3 class="text-center text-[24px] text-(--title-color) font-bold">Clients existants</h3>
+
+        <twig:ClientList clients="{{ clients }}" />
+    </div>
+
+</div>
+{% endblock %}
