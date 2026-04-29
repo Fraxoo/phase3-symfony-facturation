@@ -3,14 +3,21 @@
 {% block title %}New Product{% endblock %}
 
 {% block body %}
-<div class="flex flex-col h-screen justify-between p-8">
+<div class="flex flex-col h-screen justify-between gap-12 overflow-scroll p-8">
     <div class="flex flex-col gap-4 items-center">
         <h1 class="uppercase text-[24px] text-(--title-color) font-bold">Ajouter un nouveau produit</h1>
-    
-        {{ include('product/_form.html.twig') }}
+
+        <div class="auth-form w-1/3">
+            <div class="flex justify-between">
+                <h3 class="font-bold text-[20px]">Nouveau Produit</h3>
+                <a href="{{ path('app_product_index')}}"><i class="fa-solid fa-xmark"></i></a>
+            </div>
+            {{ include('product/_form.html.twig') }}
+        </div>
     </div>
-    <div class="flex flex-col gap-4 ">
+    <div class="flex flex-col  gap-4 ">
         <h3 class="text-center text-[24px] text-(--title-color) font-bold">Produits & Services existant</h3>
+
         <twig:ProductList products="{{ products }}" />
     </div>
 

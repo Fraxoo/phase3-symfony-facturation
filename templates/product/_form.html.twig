@@ -1,13 +1,10 @@
 {{ form_start(form , {
-'attr' : { 'class' : "auth-form w-1/3 " }
+    'attr' : { 'class' : "form " }
 }) }}
 
-<div class="flex justify-between">
-    <h3 class="font-bold text-[20px]">Nouveau Produit</h3>
-    <a href="{{ path('app_product_index')}}"><i class="fa-solid fa-xmark"></i></a>
-</div>
+
 <div class="auth-input-div">
-    <p class="text-(--gray)">Nom du produit</p>
+    <p class="text-(--gray)">Nom</p>
     {{ form_widget(form.name , {
     'attr' : { 'class' : "auth-input" }
     }) }}
@@ -46,7 +43,7 @@
 </div>
 
 <div class="flex items-center gap-4 justify-end">
-    <a href="{{ path('app_product_index')}}">Annuler</a>
+    <a class="white-btn" href="{{ path('app_product_index')}}">Annuler</a>
     <button class="btn blue-btn">Enregistrer</button>
 </div>
 {{ form_end(form) }}
