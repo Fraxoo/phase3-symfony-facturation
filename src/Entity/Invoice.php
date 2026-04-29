@@ -42,9 +42,16 @@ class Invoice
     #[ORM\OneToMany(targetEntity: Product::class, mappedBy: 'invoice_id')]
     private Collection $products;
 
+    /**
+     * @var Collection<int, Product>
+     */
+    #[ORM\OneToMany(targetEntity: Product::class, mappedBy: 'invoice')]
+    private Collection $products_row;
+
     public function __construct()
     {
         $this->products = new ArrayCollection();
+        $this->products_row = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -148,6 +155,36 @@ class Invoice
             // set the owning side to null (unless already changed)
             if ($product->getInvoiceId() === $this) {
                 $product->setInvoiceId(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Product>
+     */
+    public function getProductsRow(): Collection
+    {
+        return $this->products_row;
+    }
+
+    public function addProductsRow(Product $productsRow): static
+    {
+        if (!$this->products_row->contains($productsRow)) {
+            $this->products_row->add($productsRow);
+            $productsRow->setInvoice($this);
+        }
+
+        return $this;
+    }
+
+    public function removeProductsRow(Product $productsRow): static
+    {
+        if ($this->products_row->removeElement($productsRow)) {
+            // set the owning side to null (unless already changed)
+            if ($productsRow->getInvoice() === $this) {
+                $productsRow->setInvoice(null);
             }
         }
 

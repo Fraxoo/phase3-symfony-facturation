@@ -1,0 +1,49 @@
+{{ form_start(form , {
+    'attr' : { 'class' : "form " }
+}) }}
+
+
+<div class="auth-input-div">
+    <p class="text-(--gray)">Nom</p>
+    {{ form_widget(form.name , {
+    'attr' : { 'class' : "auth-input" }
+    }) }}
+    <div class="alert">
+        {{ form_errors(form.name) }}
+    </div>
+</div>
+<div class="auth-input-div">
+    <p class="text-(--gray)">Description</p>
+    {{ form_widget(form.description , {
+    'attr' : { 'class' : "auth-input" }
+    }) }}
+    <div class="alert">
+        {{ form_errors(form.description) }}
+    </div>
+</div>
+<div class="flex gap-4  items-center">
+    <div class="auth-input-div w-full ">
+        <p class="text-(--gray)">Prix</p>
+        {{ form_widget(form.price , {
+        'attr' : { 'class' : "auth-input" }
+        }) }}
+        <div class="alert">
+            {{ form_errors(form.price) }}
+        </div>
+    </div>
+    <div class="auth-input-div ">
+        <p class="text-(--gray)">Unité</p>
+        {{ form_widget(form.unit , {
+        'attr' : { 'class' : "auth-input" }
+        }) }}
+        <div class="alert">
+            {{ form_errors(form.unit) }}
+        </div>
+    </div>
+</div>
+
+<div class="flex items-center gap-4 justify-end">
+    <a class="white-btn" href="{{ path('app_product_index')}}">Annuler</a>
+    <button class="btn blue-btn">Enregistrer</button>
+</div>
+{{ form_end(form) }}
