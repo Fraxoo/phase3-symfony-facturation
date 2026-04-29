@@ -11,7 +11,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
-#[Route('/client')]
+#[Route('/clients')]
 final class ClientController extends AbstractController
 {
     #[Route(name: 'app_client_index', methods: ['GET'])]
@@ -30,6 +30,7 @@ final class ClientController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $client->setUserId($this->getUser());
             $entityManager->persist($client);
             $entityManager->flush();
 
@@ -39,6 +40,7 @@ final class ClientController extends AbstractController
         return $this->render('client/new.html.twig', [
             'client' => $client,
             'form' => $form,
+            'clients' => $entityManager->getRepository(Client::class)->findAll(),   
         ]);
     }
 

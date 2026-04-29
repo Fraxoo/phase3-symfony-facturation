@@ -9,4 +9,6 @@ use Symfony\UX\LiveComponent\DefaultActionTrait;
 final class ClientList
 {
     use DefaultActionTrait;
+
+    public $clients = [];
 }

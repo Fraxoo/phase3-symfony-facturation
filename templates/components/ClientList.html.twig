@@ -1,3 +1,42 @@
-<div{{ attributes }}>
-    <!-- component HTML -->
-</div>
+<table class="table table-card" {{attributes}}>
+    <thead class="table-head">
+        <tr>
+
+            <th>Nom</th>
+            <th>Contact</th>
+            <th>Adresse</th>
+            <th class="table-cell-right">actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for client in clients %}
+        <tr class="table-row">
+            <td>{{ client.name }}</td>
+                <td>
+                    <div class="flex flex-col">
+                        <p>{{ client.email }}</p>
+                        <p class="text-xs text-(--gray)">{{ client.phone }}</p>
+                    </div>
+                </td>
+            <td>{{ client.adress }}</td>
+            <td class="table-actions-cell">
+				<div class="table-actions">
+					<a class="table-action table-action-edit" href="{{ path('app_client_edit', {'id': client.id}) }}"><i
+							class="fa-solid fa-pencil"></i></a>
+					<form action="{{path('app_client_delete' , {'id': client.id})}}" method="post"
+						onsubmit="return confirm('Are you sure you want to delete this client?');">
+						<input type="hidden" name="_token" value="{{ csrf_token('delete' ~ client.id) }}">
+						<button type="submit" class="table-action table-action-delete">
+							<i class="fa-regular fa-trash-can"></i>
+						</button>
+					</form>
+				</div>
+            </td>
+        </tr>
+        {% else %}
+        <tr>
+            <td class="table-empty" colspan="8">Aucun client pour le moment</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>

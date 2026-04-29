@@ -18,18 +18,18 @@
                 <i class="fa-regular fa-file-lines"></i>
                 <p>Factures</p>
             </a>
-            <a href=""
-                class="header-input {{ app.request.pathInfo == '/dashboard/clients' ? 'bg-(--primary-bg-color) text-(--primary-color)' : '' }} ">
+            <a href="{{ path('app_client_index') }}"
+                class="header-input {{ app.request.pathInfo starts with '/clients' ? 'bg-(--primary-bg-color) text-(--primary-color)' : '' }} ">
                 <i class="fa-solid fa-user-group"></i>
                 <p>Clients</p>
             </a>
             <a href="{{ path('app_product_index') }}"
-                class="header-input {{ app.request.pathInfo == '/product' ? 'bg-(--primary-bg-color) text-(--primary-color)' : '' }} ">
+                class="header-input {{ app.request.pathInfo starts with '/product' ? 'bg-(--primary-bg-color) text-(--primary-color)' : '' }} ">
                 <i class="fa-solid fa-box"></i>
                 <p>Produits</p>
             </a>
             <a href="{{ path('app_user_edit' , {'id': app.user.id}) }}"
-                class="header-input {{ app.request.pathInfo == '/user/' ~ app.user.id ~ '/edit' ? 'bg-(--primary-bg-color) text-(--primary-color)' : '' }} ">
+                class="header-input {{ app.request.pathInfo starts with '/user/' ~ app.user.id ~ '/edit' ? 'bg-(--primary-bg-color) text-(--primary-color)' : '' }} ">
                 <i class="fa-solid fa-gear"></i>
                 <p>Profil</p>
             </a>

@@ -1,4 +1,69 @@
-{{ form_start(form) }}
-    {{ form_widget(form) }}
-    <button class="btn">{{ button_label|default('Save') }}</button>
+{{ form_start(form , {
+'attr' : { 'class' : "form " }
+}) }}
+
+
+<div class="auth-input-div">
+    <p class="text-(--gray)">Nom du client / Entreprise</p>
+    {{ form_widget(form.name , {
+    'attr' : { 'class' : "auth-input" }
+    }) }}
+    <div class="alert">
+        {{ form_errors(form.name) }}
+    </div>
+</div>
+<div class="flex gap-4  items-center">
+    <div class="auth-input-div">
+        <p class="text-(--gray)">Email</p>
+        {{ form_widget(form.email , {
+        'attr' : { 'class' : "auth-input" }
+        }) }}
+        <div class="alert">
+            {{ form_errors(form.email) }}
+        </div>
+    </div>
+    <div class="auth-input-div">
+        <p class="text-(--gray)">Téléphone</p>
+        {{ form_widget(form.phone , {
+        'attr' : { 'class' : "auth-input" }
+        }) }}
+        <div class="alert">
+            {{ form_errors(form.phone) }}
+        </div>
+    </div>
+</div>
+<div class="auth-input-div">
+    <p class="text-(--gray)">Adresse</p>
+    {{ form_widget(form.adress , {
+    'attr' : { 'class' : "auth-input" }
+    }) }}
+    <div class="alert">
+        {{ form_errors(form.adress) }}
+    </div>
+</div>
+<div class="flex gap-4">
+    <div class="auth-input-div">
+        <p class="text-(--gray)">SIRET (Optionnel)</p>
+        {{ form_widget(form.siret , {
+        'attr' : { 'class' : "auth-input" }
+        }) }}
+        <div class="alert">
+            {{ form_errors(form.siret) }}
+        </div>
+    </div>
+    <div class="auth-input-div ">
+        <p class="text-(--gray)">RIB (Optionnel)</p>
+        {{ form_widget(form.rib , {
+        'attr' : { 'class' : "auth-input" }
+        }) }}
+        <div class="alert">
+            {{ form_errors(form.rib) }}
+        </div>
+    </div>
+</div>
+
+<div class="flex items-center gap-4 justify-end">
+    <a class="white-btn" href="{{ path('app_client_index')}}">Annuler</a>
+    <button class="btn blue-btn">Enregistrer</button>
+</div>
 {{ form_end(form) }}

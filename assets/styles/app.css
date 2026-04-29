@@ -86,60 +86,70 @@ body {
     align-items: center;
 }
 
-.product-list {
+.product-list,
+.table-card {
     box-shadow: rgba(0, 0, 0, 0.1) 0px 1px 3px 0px, rgba(0, 0, 0, 0.06) 0px 1px 2px 0px;
     border-radius: 1rem;
     padding: 0.5rem;
 }
 
 .product-list th,
-.product-list td {
+.product-list td,
+.table-card th,
+.table-card td {
     padding: 1rem 1.5rem;
 }
 
-.product-list__head {
+.table-head {
     border-bottom: 1px solid #000;
 }
 
+.table-card th,
 .product-list th {
     text-align: left;
 }
 
-.product-list th:nth-child(3),
-.product-list td:nth-child(3) {
+.table-card .table-cell-center,
+.product-list .table-cell-center {
     text-align: center;
 }
 
-.product-list th:nth-child(4) {
+.table-card .table-cell-right,
+.product-list .table-cell-right {
     text-align: right;
 }
 
-.product-list__row {
+.table-row {
     background-color: var(--white);
     border-top: 1px solid var(--gray-border);
     transition: background-color 150ms ease-in-out;
 }
 
-.product-list__row:hover {
+.table-row:hover {
     background-color: var(--primary-bg-color);
 }
 
-.product-list__actions {
+.table-actions {
     display: flex;
     gap: 1rem;
     justify-content: flex-end;
     align-items: center;
+	width: 100%;
 }
 
-.product-list__action {
+.table-actions-cell {
+	vertical-align: middle;
+}
+
+.table-action {
     text-decoration: none;
 }
 
-.product-list__action--edit {
+.table-action-edit {
     color: var(--primary-color);
 }
 
-.product-list__action--delete {
+.table-action-delete {
     color: #ef4444;
     background: transparent;
     border: 0;
@@ -147,7 +157,7 @@ body {
     cursor: pointer;
 }
 
-.product-list__empty {
+.table-empty {
     text-align: center;
 }
 

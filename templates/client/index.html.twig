@@ -3,43 +3,17 @@
 {% block title %}Client index{% endblock %}
 
 {% block body %}
-    <h1>Client index</h1>
+<div class="p-8 flex flex-col gap-4 overflow-scroll h-screen">
+    <div class="flex justify-between">
+        <h1 class="text-[24px] font-bold text-(--title-color-secondary)">Clients</h1>
+        <a class="flex gap-4 items-center blue-btn" href="{{ path('app_client_new') }}">
+            <i class="fa-solid fa-plus"></i>
+            <p>Ajouter un client</p>
+        </a>
+    </div>
+    
+    <twig:ClientList clients="{{ clients }}" />
+</div>
 
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Id</th>
-                <th>Name</th>
-                <th>Email</th>
-                <th>Phone</th>
-                <th>Adress</th>
-                <th>Siret</th>
-                <th>Rib</th>
-                <th>actions</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for client in clients %}
-            <tr>
-                <td>{{ client.id }}</td>
-                <td>{{ client.name }}</td>
-                <td>{{ client.email }}</td>
-                <td>{{ client.phone }}</td>
-                <td>{{ client.adress }}</td>
-                <td>{{ client.siret }}</td>
-                <td>{{ client.rib }}</td>
-                <td>
-                    <a href="{{ path('app_client_show', {'id': client.id}) }}">show</a>
-                    <a href="{{ path('app_client_edit', {'id': client.id}) }}">edit</a>
-                </td>
-            </tr>
-        {% else %}
-            <tr>
-                <td colspan="8">no records found</td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
 
-    <a href="{{ path('app_client_new') }}">Create new</a>
 {% endblock %}
