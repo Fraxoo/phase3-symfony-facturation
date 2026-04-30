@@ -1,0 +1,33 @@
+<table class="table" {{attributes}}>
+    <thead class="bg-(--background-color) border-b-2 border-black">
+        <tr class="p-4">
+            <th class="py-4">Numéro</th>
+            <th class="py-4">Date</th>
+            <th class="py-4">Client</th>
+            <th class="py-4">Total TTC</th>
+            <th class="py-4">Statut</th>
+            <th class="py-4">actions</th>
+        </tr>
+    </thead>
+    <tbody class="h-">
+        {% for invoice in invoices %}
+        <tr>
+            <td>{{ invoice.number }}</td>
+            <td>{{ invoice.createdAt ? invoice.createdAt|date('Y-m-d H:i:s') : '' }}</td>
+            <td>{{ invoice.client ? invoice.client.name : '' }}</td>
+            <td>{{ invoice.totalTtc }}</td>
+            <td>{{ invoice.status }}</td>
+            <td><a href="{{ path('app_invoice_show', {'id': invoice.id}) }}">
+                    <div class="flex gap-2">
+                        <i class="fa-solid fa-eye"></i>
+                        <p>Détails</p>
+                    </div>
+                </a></td>
+        </tr>
+        {% else %}
+        <tr>
+            <td colspan="6">no records found</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>

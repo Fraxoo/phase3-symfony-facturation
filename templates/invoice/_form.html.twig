@@ -1,0 +1,52 @@
+{{ form_start(form) }}
+
+<div class="flex flex-col gap-8">
+    <div class="auth-form">
+        <h3 class="font-bold text-xl">Informations Générales</h3>
+        <div class="flex gap-4 items-center justify-between">
+            <div class="w-full flex flex-col gap-2">
+                <p>Client</p>
+                <div class="flex items-center gap-2">
+                    {{ form_widget(form.client_id , {
+                    'attr' : {'class': 'auth-input '}
+                    }) }}
+                    <a href="{{ path('app_client_new') }}" class="white-btn ">
+                        <i class="fa-solid fa-plus"></i>
+                    </a>
+                </div>
+            </div>
+            <div class="w-full flex flex-col gap-2">
+                <p>Date de la facture</p>
+                {{ form_widget(form.created_at , {
+                'attr' : {'class': 'auth-input'}
+                }) }}
+            </div>
+        </div>
+    </div>
+
+    <div class="flex flex-col p-8 bg-white gap-[1.7rem]">
+        <h3 class="font-bold text-xl">Lignes de la facture</h3>
+
+        <twig:InvoiceNewList invoice="{{ invoice }}" />
+
+        <div class="flex items-center ">
+            {{form_widget(form.invoice_items.vars.prototype.product_name , {
+                'attr' : {'class': 'auth-input'}
+            })}}
+            {{ form_widget(form.invoice_items.vars.prototype.quantity , {
+                'attr' : {'class': 'auth-input'}
+            }) }}
+            <button type="button" class="bg-[#858991]"></button>
+        </div>
+    </div>
+
+    {# <div class="flex gap-4 justify-end">
+        <a class="white-btn shadow shadow-[rgba(0, 0, 0, 0.24) 0px 3px 8px]" href="">Annuler</a>
+        {{ form_widget(form.saveDraft, { 'attr': {'class': 'gray-blue-btn shadow shadow-[rgba(0, 0, 0, 0.24) 0px 3px
+        8px]'} }) }}
+        {{ form_widget(form.saveValidate, { 'attr': {'class': 'blue-btn'} }) }}
+    </div> #}
+</div>
+
+
+{{ form_end(form) }}

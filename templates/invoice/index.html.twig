@@ -1,0 +1,39 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Invoice index{% endblock %}
+
+{% block body %}
+<div class="p-8 flex flex-col gap-4 overflow-scroll h-screen">
+    <div class="flex justify-between">
+        <h1 class="text-[24px] font-bold text-(--title-color-secondary)">Factures</h1>
+        <a class="flex gap-4 items-center blue-btn" href="{{ path('app_invoice_new') }}">
+            <i class="fa-solid fa-plus"></i>
+            <p>Créer une facture</p>
+        </a>
+    </div>
+
+    <div class="flex flex-col  bg-(--white) rounded-xl">
+        <div class="flex gap-2 border-b border-(--gray-border) p-4">
+            <a class="invoice-link" href="">
+                <p>Toutes</p>
+            </a>
+            <a class="invoice-link" href="">
+                <p>Brouillons</p>
+            </a>
+            <a class="invoice-link" href="">
+                <p>En attente</p>
+            </a>
+            <a class="invoice-link" href="">
+                <p>Payées</p>
+            </a>
+        </div>
+        <twig:InvoiceList invoices="{{ invoices }}" />
+    </div>
+
+    
+</div>
+
+
+
+
+{% endblock %}

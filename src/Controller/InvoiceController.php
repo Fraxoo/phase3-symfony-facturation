@@ -30,11 +30,10 @@ final class InvoiceController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $invoice->setUserId($this->getUser());
             $entityManager->persist($invoice);
             $entityManager->flush();
 
-            return $this->redirectToRoute('app_invoice_new', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('app_invoice_index', [], Response::HTTP_SEE_OTHER);
         }
 
         return $this->render('invoice/new.html.twig', [
@@ -42,6 +41,8 @@ final class InvoiceController extends AbstractController
             'form' => $form,
         ]);
     }
+
+
 
     #[Route('/{id}', name: 'app_invoice_show', methods: ['GET'])]
     public function show(Invoice $invoice): Response
@@ -72,7 +73,7 @@ final class InvoiceController extends AbstractController
     #[Route('/{id}', name: 'app_invoice_delete', methods: ['POST'])]
     public function delete(Request $request, Invoice $invoice, EntityManagerInterface $entityManager): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$invoice->getId(), $request->getPayload()->getString('_token'))) {
+        if ($this->isCsrfTokenValid('delete' . $invoice->getId(), $request->getPayload()->getString('_token'))) {
             $entityManager->remove($invoice);
             $entityManager->flush();
         }
