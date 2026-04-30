@@ -37,21 +37,14 @@ class Invoice
     private ?\DateTime $created_at = null;
 
     /**
-     * @var Collection<int, Product>
+     * @var Collection<int, InvoiceItem>
      */
-    #[ORM\OneToMany(targetEntity: Product::class, mappedBy: 'invoice_id')]
-    private Collection $products;
-
-    /**
-     * @var Collection<int, Product>
-     */
-    #[ORM\OneToMany(targetEntity: Product::class, mappedBy: 'invoice')]
-    private Collection $products_row;
+    #[ORM\OneToMany(targetEntity: InvoiceItem::class, mappedBy: 'invoice_id', orphanRemoval: true, cascade: ['persist', 'remove'])]
+    private Collection $invoiceItems;
 
     public function __construct()
     {
-        $this->products = new ArrayCollection();
-        $this->products_row = new ArrayCollection();
+        $this->invoiceItems = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -132,62 +125,33 @@ class Invoice
     }
 
     /**
-     * @return Collection<int, Product>
+     * @return Collection<int, InvoiceItem>
      */
-    public function getProducts(): Collection
+    public function getInvoiceItems(): Collection
     {
-        return $this->products;
+        return $this->invoiceItems;
     }
 
-    public function addProduct(Product $product): static
+    public function addInvoiceItem(InvoiceItem $invoiceItem): static
     {
-        if (!$this->products->contains($product)) {
-            $this->products->add($product);
-            $product->setInvoiceId($this);
+        if (!$this->invoiceItems->contains($invoiceItem)) {
+            $this->invoiceItems->add($invoiceItem);
+            $invoiceItem->setInvoiceId($this);
         }
 
         return $this;
     }
 
-    public function removeProduct(Product $product): static
+    public function removeInvoiceItem(InvoiceItem $invoiceItem): static
     {
-        if ($this->products->removeElement($product)) {
+        if ($this->invoiceItems->removeElement($invoiceItem)) {
             // set the owning side to null (unless already changed)
-            if ($product->getInvoiceId() === $this) {
-                $product->setInvoiceId(null);
+            if ($invoiceItem->getInvoiceId() === $this) {
+                $invoiceItem->setInvoiceId(null);
             }
         }
 
         return $this;
     }
 
-    /**
-     * @return Collection<int, Product>
-     */
-    public function getProductsRow(): Collection
-    {
-        return $this->products_row;
-    }
-
-    public function addProductsRow(Product $productsRow): static
-    {
-        if (!$this->products_row->contains($productsRow)) {
-            $this->products_row->add($productsRow);
-            $productsRow->setInvoice($this);
-        }
-
-        return $this;
-    }
-
-    public function removeProductsRow(Product $productsRow): static
-    {
-        if ($this->products_row->removeElement($productsRow)) {
-            // set the owning side to null (unless already changed)
-            if ($productsRow->getInvoice() === $this) {
-                $productsRow->setInvoice(null);
-            }
-        }
-
-        return $this;
-    }
 }

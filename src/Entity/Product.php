@@ -4,6 +4,8 @@ namespace App\Entity;
 
 use App\Enum\Unit;
 use App\Repository\ProductRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -15,10 +17,6 @@ class Product
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\ManyToOne(inversedBy: 'products')]
-    #[ORM\JoinColumn(nullable: false)]
-    private ?Invoice $invoice_id = null;
-
     #[ORM\Column(length: 255)]
     private ?string $name = null;
 
@@ -28,26 +26,23 @@ class Product
     #[ORM\Column(type: Types::DECIMAL, precision: 15, scale: 2)]
     private ?string $price = null;
 
-
-
     #[ORM\Column(enumType: Unit::class)]
     private ?Unit $unit = null;
+
+    /**
+     * @var Collection<int, InvoiceItem>
+     */
+    #[ORM\OneToMany(targetEntity: InvoiceItem::class, mappedBy: 'product_id')]
+    private Collection $invoiceItems;
+
+    public function __construct()
+    {
+        $this->invoiceItems = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
         return $this->id;
-    }
-
-    public function getInvoiceId(): ?Invoice
-    {
-        return $this->invoice_id;
-    }
-
-    public function setInvoiceId(?Invoice $invoice_id): static
-    {
-        $this->invoice_id = $invoice_id;
-
-        return $this;
     }
 
     public function getName(): ?string
@@ -87,7 +82,6 @@ class Product
     }
 
 
-
     public function getUnit(): ?Unit
     {
         return $this->unit;
@@ -98,5 +92,13 @@ class Product
         $this->unit = $unit;
 
         return $this;
+    }
+
+    /**
+     * @return Collection<int, InvoiceItem>
+     */
+    public function getInvoiceItems(): Collection
+    {
+        return $this->invoiceItems;
     }
 }
