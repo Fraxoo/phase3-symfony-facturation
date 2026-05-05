@@ -2,7 +2,6 @@
 
 namespace App\Form;
 
-use App\Entity\Invoice;
 use App\Entity\InvoiceItem;
 use App\Entity\Product;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
@@ -16,13 +15,9 @@ class InvoiceItemType extends AbstractType
     {
         $builder
             ->add('quantity')
-            ->add('product_name', EntityType::class, [
+            ->add('product_id', EntityType::class, [
                 'class' => Product::class,
                 'choice_label' => 'name',
-            ])
-            ->add('invoice_id', EntityType::class, [
-                'class' => Invoice::class,
-                'choice_label' => 'id',
             ])
         ;
     }

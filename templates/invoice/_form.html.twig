@@ -24,62 +24,123 @@
         </div>
     </div>
 
-    <div class="flex flex-col p-8 bg-white gap-[1.7rem]">
+    <div class="flex flex-col p-8 auth-form bg-white gap-[1.7rem] ">
         <h3 class="font-bold text-xl">Lignes de la facture</h3>
+
+        {% set productChoices = form.invoiceItems.vars.prototype.product_id.vars.choices %}
+
+        {% set itemPrototype %}
+        <tr class="invoice-item-row table-row">
+            <td class="py-2 ">
+                <p class="item-product-label " data-display="product"></p>
+                {{ form_widget(form.invoiceItems.vars.prototype.product_id, { 'attr': {'class': 'hidden', 'data-field':
+                'product'} }) }}
+            </td>
+            <td class="py-2">
+                <p class="item-quantity text-center table-cell-center" data-display="quantity"></p>
+                {{ form_widget(form.invoiceItems.vars.prototype.quantity, { 'attr': {'class': 'hidden', 'data-field':
+                'quantity'} }) }}
+            </td>
+            <td class="py-2">
+                <p class="item-unit-price text-center table-cell-center" data-display="unitPrice"></p>
+            </td>
+            <td class="py-2 flex gap-4 justify-center ">
+                <p class="item-line-total" data-display="lineTotal"></p>
+                <button type="button" class="remove-item text-red-600 cursor-pointer"><i class="fa-regular fa-trash-can"></i></button>
+            </td>
+        </tr>
+        {% endset %}
 
         <table class="table">
             <thead class="bg-(--background-color) border-b-2 border-black">
                 <tr class="p-4">
-                    <th class="py-4">Numéro</th>
-                    <th class="py-4">Date</th>
-                    <th class="py-4">Client</th>
-                    <th class="py-4">Total TTC</th>
-                    <th class="py-4">Statut</th>
-                    <th class="py-4">actions</th>
+                    <th class="py-4">Produit / Service</th>
+                    <th class="py-4">Qté</th>
+                    <th class="py-4">Prix unitaire</th>
+                    <th class="py-4">Total</th>
                 </tr>
             </thead>
-            <tbody class="h-">
-                {% for inv in invoice %}
-                <tr>
-                    <td>{{ inv.number }}</td>
-                    <td>{{ inv.createdAt ? inv.createdAt|date('Y-m-d H:i:s') : '' }}</td>
-                    <td>{{ inv.client ? inv.client.name : '' }}</td>
-                    <td>{{ inv.totalTtc }}</td>
-                    <td>{{ inv.status }}</td>
-                    <td></td>
+            <tbody id="invoice-items" data-prototype="{{ itemPrototype|e('html_attr') }}"
+                data-index="{{ form.invoiceItems|length }}"
+                data-products="{{ (productData ?? [])|json_encode|e('html_attr') }}" class="h-">
+                {% for itemForm in form.invoiceItems %}
+                {% set unitPrice = itemForm.product_id.vars.data ? (itemForm.product_id.vars.data.price + 0) : 0 %}
+                {% set qty = itemForm.quantity.vars.data ? (itemForm.quantity.vars.data + 0) : 0 %}
+                <tr class="invoice-item-row">
+                    <td class="py-2">
+                        <p class="item-product-label" data-display="product">{{ itemForm.product_id.vars.data ?
+                            itemForm.product_id.vars.data.name : '' }}</p>
+                        {{ form_widget(itemForm.product_id, { 'attr': {'class': 'hidden', 'data-field': 'product'} }) }}
+                    </td>
+                    <td class="py-2 table-cell-center">
+                        <p class="item-quantity text-center" data-display="quantity">{{ itemForm.quantity.vars.data }}</p>
+                        {{ form_widget(itemForm.quantity, { 'attr': {'class': 'hidden', 'data-field': 'quantity'} }) }}
+                    </td>
+                    <td class="py-2">
+                        <p class="item-unit-price" data-display="unitPrice">{{ unitPrice|number_format(2, ',', ' ') }} €
+                        </p>
+                    </td>
+                    <td class="py-2">
+                        <p class="item-line-total" data-display="lineTotal">{{ (unitPrice * qty)|number_format(2, ',', '
+                            ') }} €</p>
+                    </td>
+                    <td class="py-2">
+                        <button type="button" class="remove-item">Supprimer</button>
+                    </td>
                 </tr>
                 {% else %}
-                <tr>
+                <tr class="invoice-items-empty">
                     <td colspan="6">Aucun Produit / Service</td>
                 </tr>
                 {% endfor %}
             </tbody>
         </table>
 
-        <pre>
-            {{ dump() }}
-        </pre>
 
-        <div class="flex items-center ">
-            {{form_widget(form.invoice_items.vars.prototype.product_name , {
-            'attr' : {'class': 'auth-input'}
-            })}}
-            {{ form_widget(form.invoice_items.vars.prototype.quantity , {
-            'attr' : {'class': 'auth-input'}
-            }) }}
-            <button type="button" class="bg-[#858991] flex gap-2 items-center text-white px-2 py-1" id="add-item">
+        <div class="flex items-stretch p-4 border border-(--gray-border) rounded-xl bg-[#f9fafb] justify-between gap-4">
+            <div class="flex items-center gap-4 w-full">
+                <div class="flex flex-col flex-1 gap-2">
+                    <p class="text-(--gray)">Produit / Service</p>
+                    <select id="draft-product" class="auth-input">
+                        <option value="">Sélectionner…</option>
+                        {% if productData is defined %}
+                        {% for p in productData %}
+                        <option value="{{ p.id }}" data-price="{{ p.price }}">{{ p.name }}</option>
+                        {% endfor %}
+                        {% else %}
+                        {% for choice in productChoices %}
+                        <option value="{{ choice.value }}">{{ choice.label }}</option>
+                        {% endfor %}
+                        {% endif %}
+                    </select>
+                </div>
+                <div class="flex flex-col flex-1 gap-2">
+                    <p class="text-(--gray)">Quantité</p>
+                    <input id="draft-quantity" class="auth-input" type="number" min="1" value="1" />
+                </div>
+            </div>
+
+            <button type="button" class="bg-[#858991] self-end rounded-xl flex gap-2 items-center text-white px-4 py-2"
+                id="add-item">
                 <i class="fa-solid fa-plus"></i>
                 <p>Ajouter</p>
             </button>
         </div>
+        <div class="flex justify-end">
+            <p class="font-bold">Total : <span id="invoice-total">0,00 €</span></p>
+        </div>
     </div>
-
-    {# <div class="flex gap-4 justify-end">
-        <a class="white-btn shadow shadow-[rgba(0, 0, 0, 0.24) 0px 3px 8px]" href="">Annuler</a>
-        {{ form_widget(form.saveDraft, { 'attr': {'class': 'gray-blue-btn shadow shadow-[rgba(0, 0, 0, 0.24) 0px 3px
-        8px]'} }) }}
-        {{ form_widget(form.saveValidate, { 'attr': {'class': 'blue-btn'} }) }}
-    </div> #}
+    <div class="flex justify-end gap-4 items-center">
+        <a class="white-btn" href="">Annuler</a>
+        {{ form_widget(form.saveDump , {
+            'attr' : {'class': 'blue-transparent-btn' }
+        }) }}
+        {{ form_widget(form.save , {
+        'attr' : {'class': 'blue-btn' }
+        }) }}
+        {# <button class="blue-transparent-btn">Enregistrer en brouillon</button>
+        <button class="blue-btn">Enregistrer et valider</button> #}
+    </div>
 </div>
 
 

@@ -1,28 +1,31 @@
-<table class="table" {{attributes}}>
+<table class="table table-card" {{attributes}}>
     <thead class="bg-(--background-color) border-b-2 border-black">
         <tr class="p-4">
             <th class="py-4">Numéro</th>
             <th class="py-4">Date</th>
             <th class="py-4">Client</th>
-            <th class="py-4">Total TTC</th>
-            <th class="py-4">Statut</th>
-            <th class="py-4">actions</th>
+            <th class="py-4 table-cell-center">Total TTC</th>
+            <th class="py-4 table-cell-center">Statut</th>
+            <th class="py-4 text-end table-cell-right">actions</th>
         </tr>
     </thead>
     <tbody class="h-">
         {% for invoice in invoices %}
-        <tr>
+        <tr class="table-row">
             <td>{{ invoice.number }}</td>
             <td>{{ invoice.createdAt ? invoice.createdAt|date('Y-m-d H:i:s') : '' }}</td>
-            <td>{{ invoice.client ? invoice.client.name : '' }}</td>
-            <td>{{ invoice.totalTtc }}</td>
-            <td>{{ invoice.status }}</td>
-            <td><a href="{{ path('app_invoice_show', {'id': invoice.id}) }}">
-                    <div class="flex gap-2">
-                        <i class="fa-solid fa-eye"></i>
-                        <p>Détails</p>
-                    </div>
-                </a></td>
+            <td>{{ invoice.clientId ? invoice.clientId.name : '' }}</td>
+            <td class="table-cell-center">{{ invoice.totalTtc }}</td>
+            <td class="table-cell-center">{{ invoice.status.name }}</td>
+            <td class="table-actions flex gap-2 text-(--primary-color)">
+                <a href="{{path('app_invoice_edit' , {'id': invoice.id})}}">
+                    <i class="fa-regular fa-pen-to-square"></i>
+                </a>
+                <a class="flex gap-2 items-center " href="{{ path('app_invoice_show', {'id': invoice.id}) }}">
+                    <i class="fa-solid fa-eye"></i>
+                    <p>Détails</p>
+                </a>
+            </td>
         </tr>
         {% else %}
         <tr>
