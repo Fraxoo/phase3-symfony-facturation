@@ -17,14 +17,17 @@ use Symfony\Component\Routing\Attribute\Route;
 #[Route('/invoice')]
 final class InvoiceController extends AbstractController
 {
-    #[Route(name: 'app_invoice_index', methods: ['GET'])]
-    public function index(InvoiceRepository $invoiceRepository): Response
+    #[Route(name: 'app_invoice_index', methods: ['GET' , 'POST'])]
+    public function index(Request $request, InvoiceRepository $invoiceRepository): Response
     {
+        $filter = $request->query->get('filter');
+        $trueFilter = $filter === 'draft' ? Status::draft : ($filter === 'pending_payment' ? Status::pending_payment : ($filter === 'paid' ? Status::paid : null));
+
         $user = $this->getUser();
         $userId = $user->getId();
 
         return $this->render('invoice/index.html.twig', [
-            'invoices' => $invoiceRepository->getAllInvoiceWithClientByUser($userId),
+            'invoices' => $invoiceRepository->getAllInvoiceWithClientByUser($userId, $trueFilter),
         ]);
     }
 
