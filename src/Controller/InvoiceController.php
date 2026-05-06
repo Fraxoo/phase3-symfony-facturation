@@ -92,7 +92,7 @@ final class InvoiceController extends AbstractController
         }
 
         return $this->render('invoice/show.html.twig', [
-            'invoice' => $invoiceRepository->getInvoiceWithInvoiceItemsAndClient($invoice)
+            'invoice' => $invoiceRepository->getInvoiceWithInvoiceItemsAndClient($invoice->getId())
         ]);
     }
 

@@ -82,11 +82,11 @@ class InvoiceRepository extends ServiceEntityRepository
             ->getSingleScalarResult();
     }
 
-    public function getInvoiceWithInvoiceItemsAndClient(Invoice $invoice)
+    public function getInvoiceWithInvoiceItemsAndClient(int $invoiceId)
     {
         return $this->createQueryBuilder('i')
             ->andWhere('i.id = :invoiceId')
-            ->setParameter('invoiceId', $invoice->getId())
+            ->setParameter('invoiceId', $invoiceId)
             ->join('i.client_id', 'c')
             ->join('i.invoiceItems', 'ii')
             ->join('ii.product_id', 'p')
