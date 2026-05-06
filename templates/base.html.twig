@@ -27,7 +27,7 @@
 	</head>
 	<body class="flex flex-5">
 		{% block content %}
-			{% if app.request.pathInfo != '/login' %}
+			{% if app.request.pathInfo != '/login' and app.request.pathInfo != '/register' %}
 				<twig:NavBar/>
 			{% endif %}
 		{% endblock %}

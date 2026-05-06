@@ -1,0 +1,17 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Edit Invoice
+{% endblock %}
+
+{% block body %}
+	<div class="flex flex-col gap-8 py-8 px-50 h-screen overflow-scroll">
+		   <a class="text-(--gray) flex gap-4 items-center" href="{{ path('app_invoice_index') }}">
+            <i class="fa-solid fa-arrow-left"></i>
+            <p>Retour au factures</p>
+        </a>
+		<h1 class="font-bold text-2xl">Modifier la facture</h1>
+
+		{{ include('invoice/_form.html.twig', {'button_label': 'Update'}) }}
+
+	</div>
+{% endblock %}

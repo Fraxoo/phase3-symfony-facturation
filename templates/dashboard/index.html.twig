@@ -3,9 +3,79 @@
 {% block title %}Hello DashboardController!{% endblock %}
 
 {% block body %}
-<div class="flex flex-6">
-    <div class="flex flex-5">
+<div class="p-8 flex flex-col gap-4 overflow-scroll h-screen">
+    <h1 class="text-[24px] font-bold text-(--title-color-secondary)">Dashboard</h1>
+    <div class="flex gap-8 justify-between">
+        <div class="dashboard-box">
+            <div class="p-3  w-fit rounded-xl text-2xl bg-[#dcfce7] text-[#00a63e]">
+                <i class="fa-solid  fa-euro-sign"></i>
+            </div>
+            <div>
+                <p class="text-(--gray)">Chiffre d'affaires (Payé)</p>
+                <p class="font-bold text-2xl">0.00 €</p>
+            </div>
+        </div>
+        <div class="dashboard-box">
+            <div class="p-3 w-fit rounded-xl text-2xl bg-[#fef3c7] text-[#d97706]">
+                <i class="fa-solid  fa-file-invoice"></i>
+            </div>
+            <div>
+                <p class="text-(--gray)">Factures en attente de paiement</p>
+                <p class="font-bold text-2xl">0</p>
+            </div>
+        </div>
+        <div class="dashboard-box">
+            <div class="p-3 w-fit rounded-xl text-2xl bg-[#dbeafe] text-[#3b82f6]">
+                <i class="fa-solid  fa-users"></i>
+            </div>
+            <div>
+                <p class="text-(--gray)">Total Clients</p>
+                <p class="font-bold text-2xl">0</p>
+            </div>
+        </div>
+        <div class="dashboard-box">
+            <div class="p-3 w-fit rounded-xl text-2xl bg-[#f3e8ff] text-[#8b5cf6]">
+                <i class="fa-solid  fa-box"></i>
+            </div>
+            <div>
+                <p class="text-(--gray)">Total Produits</p>
+                <p class="font-bold text-2xl">0</p>
+            </div>
+        </div>
+    </div>
+    <div>
+        <p>Graphique</p>
+    </div>
 
+    <div class="flex gap-8 justify-between flex-wrap">
+        <a class="dashboard-redirect " href="{{ path('app_invoice_new')}}">
+            <div class="flex  flex-col gap-2 ">
+                <p>Créer une facture</p>
+                <p>Nouvelle prestation</p>
+            </div>
+            <i class=" fa-solid fa-arrow-right"></i>
+        </a>
+        <a class="dashboard-redirect" href="{{ path('app_client_index')}}">
+            <div class="flex flex-col gap-2 ">
+                <p>Ajouter un client</p>
+                <p>Gérer le répertoire</p>
+            </div>
+            <i class=" fa-solid fa-arrow-right"></i>
+        </a>
+        <a class="dashboard-redirect" href="{{ path('app_product_index')}}">
+            <div class="flex flex-col gap-2 ">
+                <p>Créer un produit / service</p>
+                <p>Enrichir le catalogue pour rediger rapidement vos factures</p>
+            </div>
+            <i class=" fa-solid fa-arrow-right"></i>
+        </a>
+        <a class="dashboard-redirect" href="{{ path('app_invoice_new')}}">
+            <div class="flex flex-col gap-2 ">
+                <p>Relancer tous les clients</p>
+                <p>Envoyer un mail a tout les clients en retard de paiement</p>
+            </div>
+            <i class=" fa-solid fa-arrow-right"></i>
+        </a>
     </div>
 </div>
 {% endblock %}

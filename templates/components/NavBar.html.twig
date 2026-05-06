@@ -13,8 +13,8 @@
                 <i class="fa-solid fa-chart-column"></i>
                 <p>Dashboard</p>
             </a>
-            <a href=""
-                class="header-input {{ app.request.pathInfo == '/dashboard/factures' ? 'bg-(--primary-bg-color) text-(--primary-color)' : '' }} ">
+            <a href="{{ path('app_invoice_index') }}"
+                class="header-input {{ app.request.pathInfo starts with '/invoice' ? 'bg-(--primary-bg-color) text-(--primary-color)' : '' }} ">
                 <i class="fa-regular fa-file-lines"></i>
                 <p>Factures</p>
             </a>
