@@ -69,8 +69,8 @@ body {
 }
 
 .blue-transparent-btn{
-        background-color: #e6edfb;
-        border: 1px solid #b6cbf7 ;
+    background-color: #e6edfb;
+    border: 1px solid #b6cbf7 ;
     padding: 0.5rem 1rem;
     border-radius: 0.5rem;
     color: var(--primary-color);
@@ -189,4 +189,10 @@ body {
 .invoice-bold {
     font-weight: bold;
     font-size: large;
+}
+
+.invoice-link {
+    padding: 0.5rem 1rem;
+    background-color: var(--color-gray-100);
+    border-radius: 0.5rem;
 }

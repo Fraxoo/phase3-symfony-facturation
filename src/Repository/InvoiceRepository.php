@@ -4,6 +4,7 @@ namespace App\Repository;
 
 use App\Entity\Invoice;
 use App\Entity\User;
+use App\Enum\Status;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\Persistence\ManagerRegistry;
@@ -44,7 +45,7 @@ class InvoiceRepository extends ServiceEntityRepository
     //        ;
     //    }
 
-    public function getAllInvoiceWithClientByUser(int $userId): array
+    public function getAllInvoiceWithClientByUser(int $userId, ?Status $filter = null): array
     {;
 
         $query = $this->createQueryBuilder('i')
@@ -52,10 +53,14 @@ class InvoiceRepository extends ServiceEntityRepository
             ->join('i.client_id', 'c')
             ->where('i.user_id = :userId')
             ->setParameter('userId', $userId)
-            ->orderBy('i.created_at', 'DESC')
-            ->getQuery();
+            ->orderBy('i.created_at', 'DESC');
 
-        return $query->getResult();
+        if ($filter) {
+            $query->andWhere('i.status = :status')
+                ->setParameter('status', $filter);
+        }
+
+        return $query->getQuery()->getResult();
     }
 
     public function countInvoicesForUserCurrentMonth(User $user, ?\DateTimeInterface $forDate = null): int

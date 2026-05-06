@@ -15,23 +15,24 @@
 
     <div class="flex flex-col  bg-(--white) rounded-xl">
         <div class="flex gap-2 border-b border-(--gray-border) p-4">
-            <a class="invoice-link" href="">
+            <a class="{{ app.request.query.get('filter') == null ? 'blue-transparent-btn' : 'invoice-link' }}" href="{{ path('app_invoice_index', {'filter': null}) }}">
                 <p>Toutes</p>
             </a>
-            <a class="invoice-link" href="">
+            <a class="{{ app.request.query.get('filter') == 'draft' ? 'blue-transparent-btn' : 'invoice-link' }}" href="{{ path('app_invoice_index', {'filter': 'draft'}) }}">
                 <p>Brouillons</p>
             </a>
-            <a class="invoice-link" href="">
+            <a class="{{ app.request.query.get('filter') == 'pending_payment' ? 'blue-transparent-btn' : 'invoice-link' }}" href="{{ path('app_invoice_index', {'filter': 'pending_payment'}) }}">
                 <p>En attente</p>
             </a>
-            <a class="invoice-link" href="">
+            <a class="{{ app.request.query.get('filter') == 'paid' ? 'blue-transparent-btn' : 'invoice-link' }}"
+                href="{{ path('app_invoice_index', {'filter': 'paid'}) }}">
                 <p>Payées</p>
             </a>
         </div>
         <twig:InvoiceList invoices="{{ invoices }}" />
     </div>
 
-    
+
 </div>
 
 
