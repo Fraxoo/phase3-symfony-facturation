@@ -9,17 +9,6 @@ import './styles/app.css';
 
 console.log('This log comes from assets/app.js - welcome to AssetMapper! 🎉');
 
-
-const container = document.getElementById('invoice-items');
-const addButton = document.getElementById('add-item');
-const draftProduct = document.getElementById('draft-product');
-const draftQuantity = document.getElementById('draft-quantity');
-
-const invoiceTotalEl = document.getElementById('invoice-total');
-const totalTtc = document.getElementById('invoice_total_ttc')
-
-
-
 function formatEuro(value) {
     const numberValue = Number(value);
     if (Number.isNaN(numberValue)) {
@@ -36,140 +25,66 @@ function formatEuro(value) {
     }
 }
 
-function getProductPriceMap() {
-    if (!container) {
-        return new Map();
-    }
-
-    try {
-        const products = JSON.parse(container.dataset.products || '[]');
-        const map = new Map();
-        for (const product of products) {
-            if (!product || product.id == null) {
-                continue;
-            }
-            map.set(String(product.id), Number(product.price));
-        }
-        return map;
-    } catch {
-        return new Map();
-    }
-}
-
-
-function recalculateTotals() {
+function initInvoiceForm() {
+    const container = document.getElementById('invoice-items');
     if (!container) {
         return;
     }
 
-    const priceMap = getProductPriceMap();
-    let invoiceTotal = 0;
+    const addButton = document.getElementById('add-item');
+    const draftProduct = document.getElementById('draft-product');
+    const draftQuantity = document.getElementById('draft-quantity');
+    const invoiceTotalEl = document.getElementById('invoice-total');
+    const totalTtc =
+        document.getElementById('invoice_total_ttc') || document.querySelector('input[name$="[total_ttc]"]');
 
-    const rows = container.querySelectorAll('tr.invoice-item-row');
-    for (const row of rows) {
-        const productSelect = row.querySelector('[data-field="product"]');
-        const quantityInput = row.querySelector('[data-field="quantity"]');
-
-        const productId = productSelect && 'value' in productSelect ? productSelect.value : '';
-        const qty = quantityInput && 'value' in quantityInput ? Number(quantityInput.value) : 0;
-        const unitPrice = priceMap.has(String(productId)) ? Number(priceMap.get(String(productId))) : 0;
-
-        const lineTotal = unitPrice * (Number.isNaN(qty) ? 0 : qty);
-        invoiceTotal += Number.isNaN(lineTotal) ? 0 : lineTotal;
-
-        const unitPriceDisplay = row.querySelector('[data-display="unitPrice"]');
-        const lineTotalDisplay = row.querySelector('[data-display="lineTotal"]');
-        const productDisplay = row.querySelector('[data-display="product"]');
-        const quantityDisplay = row.querySelector('[data-display="quantity"]');
-
-        if (productDisplay && draftProduct && draftProduct.options) {
-            const option = draftProduct.querySelector(`option[value="${CSS.escape(String(productId))}"]`);
-            if (option) {
-                productDisplay.textContent = option.text;
+    function getProductPriceMap() {
+        try {
+            const products = JSON.parse(container.dataset.products || '[]');
+            const map = new Map();
+            for (const product of products) {
+                if (!product || product.id == null) {
+                    continue;
+                }
+                map.set(String(product.id), Number(product.price));
             }
-        }
-
-        if (quantityDisplay) {
-            quantityDisplay.textContent = String(Number.isNaN(qty) ? 0 : qty);
-        }
-
-        if (unitPriceDisplay) {
-            unitPriceDisplay.textContent = formatEuro(unitPrice);
-        }
-        if (lineTotalDisplay) {
-            lineTotalDisplay.textContent = formatEuro(lineTotal);
+            return map;
+        } catch {
+            return new Map();
         }
     }
 
-    if (invoiceTotalEl) {
-        invoiceTotalEl.textContent = formatEuro(invoiceTotal);
+    function recalculateTotals() {
+        const priceMap = getProductPriceMap();
+        let invoiceTotal = 0;
 
-        totalTtc.value = invoiceTotal
+        const rows = container.querySelectorAll('tr.invoice-item-row');
+        for (const row of rows) {
+            const productSelect = row.querySelector('[data-field="product"]');
+            const quantityInput = row.querySelector('[data-field="quantity"]');
 
-    }
+            const productId = productSelect && 'value' in productSelect ? productSelect.value : '';
+            const qty = quantityInput && 'value' in quantityInput ? Number(quantityInput.value) : 0;
+            const unitPrice = priceMap.has(String(productId)) ? Number(priceMap.get(String(productId))) : 0;
 
-}
+            const lineTotal = unitPrice * (Number.isNaN(qty) ? 0 : qty);
+            invoiceTotal += Number.isNaN(lineTotal) ? 0 : lineTotal;
 
-if (container && addButton) {
-    addButton.addEventListener('click', () => {
-        const selectedProductId = draftProduct && 'value' in draftProduct ? draftProduct.value : '';
-        const selectedProductLabel =
-            draftProduct && draftProduct.selectedOptions && draftProduct.selectedOptions[0]
-                ? draftProduct.selectedOptions[0].text
-                : '';
-        const selectedQuantity = draftQuantity && 'value' in draftQuantity ? parseInt(draftQuantity.value || '0', 10) : 0;
+            const unitPriceDisplay = row.querySelector('[data-display="unitPrice"]');
+            const lineTotalDisplay = row.querySelector('[data-display="lineTotal"]');
+            const productDisplay = row.querySelector('[data-display="product"]');
+            const quantityDisplay = row.querySelector('[data-display="quantity"]');
 
-        if (!selectedProductId || Number.isNaN(selectedQuantity) || selectedQuantity <= 0) {
-            return;
-        }
-
-        const prototype = container.dataset.prototype;
-        const index = parseInt(container.dataset.index || '0', 10);
-
-        if (!prototype) {
-            return;
-        }
-
-        const emptyRow = container.querySelector('.invoice-items-empty');
-        if (emptyRow) {
-            emptyRow.remove();
-        }
-
-        const newRowHtml = prototype.replace(/__name__/g, String(index));
-        container.insertAdjacentHTML('beforeend', newRowHtml);
-        container.dataset.index = String(index + 1);
-
-        const newRow = container.querySelector('tr.invoice-item-row:last-child');
-        if (newRow) {
-            const productDisplay = newRow.querySelector('[data-display="product"]');
-            const quantityDisplay = newRow.querySelector('[data-display="quantity"]');
-            const unitPriceDisplay = newRow.querySelector('[data-display="unitPrice"]');
-            const lineTotalDisplay = newRow.querySelector('[data-display="lineTotal"]');
-
-            const productSelect = newRow.querySelector('[data-field="product"]');
-            const quantityInput = newRow.querySelector('[data-field="quantity"]');
-
-            if (productDisplay) {
-                productDisplay.textContent = selectedProductLabel;
+            if (productDisplay && draftProduct) {
+                const option = draftProduct.querySelector(`option[value="${CSS.escape(String(productId))}"]`);
+                if (option) {
+                    productDisplay.textContent = option.text;
+                }
             }
 
             if (quantityDisplay) {
-                quantityDisplay.textContent = String(selectedQuantity);
+                quantityDisplay.textContent = String(Number.isNaN(qty) ? 0 : qty);
             }
-
-            if (productSelect) {
-                productSelect.value = selectedProductId;
-                productSelect.dispatchEvent(new Event('change', { bubbles: true }));
-            }
-
-            if (quantityInput) {
-                quantityInput.value = String(selectedQuantity);
-                quantityInput.dispatchEvent(new Event('input', { bubbles: true }));
-            }
-
-            const priceMap = getProductPriceMap();
-            const unitPrice = priceMap.has(String(selectedProductId)) ? Number(priceMap.get(String(selectedProductId))) : 0;
-            const lineTotal = unitPrice * selectedQuantity;
 
             if (unitPriceDisplay) {
                 unitPriceDisplay.textContent = formatEuro(unitPrice);
@@ -179,44 +94,136 @@ if (container && addButton) {
             }
         }
 
-        if (draftProduct && 'value' in draftProduct) {
-            draftProduct.value = '';
-        }
-        if (draftQuantity && 'value' in draftQuantity) {
-            draftQuantity.value = '1';
+        if (invoiceTotalEl) {
+            invoiceTotalEl.textContent = formatEuro(invoiceTotal);
         }
 
-        recalculateTotals();
-    });
-
-    container.addEventListener('click', (event) => {
-        const target = event.target;
-        if (!(target instanceof HTMLElement)) {
-            return;
+        if (totalTtc) {
+            totalTtc.value = invoiceTotal.toFixed(2);
         }
+    }
 
-        const removeButton = target.closest('.remove-item');
-        if (!removeButton) {
-            return;
-        }
+    if (addButton && addButton.dataset.invoiceItemsBound !== '1') {
+        addButton.dataset.invoiceItemsBound = '1';
 
-        event.preventDefault();
+        addButton.addEventListener('click', (event) => {
+            event.preventDefault();
 
-        const row = removeButton.closest('tr');
-        if (row) {
-            row.remove();
-        }
+            const selectedProductId = draftProduct && 'value' in draftProduct ? draftProduct.value : '';
+            const selectedProductLabel =
+                draftProduct && draftProduct.selectedOptions && draftProduct.selectedOptions[0]
+                    ? draftProduct.selectedOptions[0].text
+                    : '';
+            const selectedQuantity =
+                draftQuantity && 'value' in draftQuantity ? parseInt(draftQuantity.value || '0', 10) : 0;
 
-        const remainingRows = container.querySelectorAll('tr.invoice-item-row');
-        if (remainingRows.length === 0) {
-            container.insertAdjacentHTML(
-                'beforeend',
-                '<tr class="invoice-items-empty"><td colspan="6">Aucun Produit / Service</td></tr>'
-            );
-        }
+            if (!selectedProductId || Number.isNaN(selectedQuantity) || selectedQuantity <= 0) {
+                return;
+            }
 
-        recalculateTotals();
-    });
+            const prototype = container.dataset.prototype;
+            const index = parseInt(container.dataset.index || '0', 10);
+
+            if (!prototype) {
+                return;
+            }
+
+            const emptyRow = container.querySelector('.invoice-items-empty');
+            if (emptyRow) {
+                emptyRow.remove();
+            }
+
+            const newRowHtml = prototype.replace(/__name__/g, String(index));
+            container.insertAdjacentHTML('beforeend', newRowHtml);
+            container.dataset.index = String(index + 1);
+
+            const newRow = container.querySelector('tr.invoice-item-row:last-child');
+            if (newRow) {
+                const productDisplay = newRow.querySelector('[data-display="product"]');
+                const quantityDisplay = newRow.querySelector('[data-display="quantity"]');
+                const unitPriceDisplay = newRow.querySelector('[data-display="unitPrice"]');
+                const lineTotalDisplay = newRow.querySelector('[data-display="lineTotal"]');
+
+                const productSelect = newRow.querySelector('[data-field="product"]');
+                const quantityInput = newRow.querySelector('[data-field="quantity"]');
+
+                if (productDisplay) {
+                    productDisplay.textContent = selectedProductLabel;
+                }
+
+                if (quantityDisplay) {
+                    quantityDisplay.textContent = String(selectedQuantity);
+                }
+
+                if (productSelect) {
+                    productSelect.value = selectedProductId;
+                    productSelect.dispatchEvent(new Event('change', { bubbles: true }));
+                }
+
+                if (quantityInput) {
+                    quantityInput.value = String(selectedQuantity);
+                    quantityInput.dispatchEvent(new Event('input', { bubbles: true }));
+                }
+
+                const priceMap = getProductPriceMap();
+                const unitPrice = priceMap.has(String(selectedProductId)) ? Number(priceMap.get(String(selectedProductId))) : 0;
+                const lineTotal = unitPrice * selectedQuantity;
+
+                if (unitPriceDisplay) {
+                    unitPriceDisplay.textContent = formatEuro(unitPrice);
+                }
+                if (lineTotalDisplay) {
+                    lineTotalDisplay.textContent = formatEuro(lineTotal);
+                }
+            }
+
+            if (draftProduct && 'value' in draftProduct) {
+                draftProduct.value = '';
+            }
+            if (draftQuantity && 'value' in draftQuantity) {
+                draftQuantity.value = '1';
+            }
+
+            recalculateTotals();
+        });
+    }
+
+    if (container.dataset.invoiceItemsRemoveBound !== '1') {
+        container.dataset.invoiceItemsRemoveBound = '1';
+
+        container.addEventListener('click', (event) => {
+            const target = event.target;
+            if (!(target instanceof HTMLElement)) {
+                return;
+            }
+
+            const removeButton = target.closest('.remove-item');
+            if (!removeButton) {
+                return;
+            }
+
+            event.preventDefault();
+
+            const row = removeButton.closest('tr');
+            if (row) {
+                row.remove();
+            }
+
+            const remainingRows = container.querySelectorAll('tr.invoice-item-row');
+            if (remainingRows.length === 0) {
+                container.insertAdjacentHTML(
+                    'beforeend',
+                    '<tr class="invoice-items-empty"><td colspan="6">Aucun Produit / Service</td></tr>'
+                );
+            }
+
+            recalculateTotals();
+        });
+    }
 
     recalculateTotals();
 }
+
+document.addEventListener('turbo:load', initInvoiceForm);
+document.addEventListener('DOMContentLoaded', initInvoiceForm);
+initInvoiceForm();

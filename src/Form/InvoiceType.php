@@ -11,18 +11,22 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\Extension\Core\Type\DateType;
 
 class InvoiceType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('created_at')
+            ->add('created_at', DateType::class, [
+                'widget' => 'single_text',
+                'format' => 'yyyy-MM-dd',
+            ])
             ->add('client_id', EntityType::class, [
                 'class' => Client::class,
                 'choice_label' => 'name',
             ])
-            ->add('total_ttc' , HiddenType::class )
+            ->add('total_ttc', HiddenType::class)
             ->add('invoiceItems', CollectionType::class, [
                 'entry_type' => InvoiceItemType::class,
                 'allow_add' => true,

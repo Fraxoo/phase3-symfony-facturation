@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Invoice;
 use App\Entity\Product;
+use App\Entity\User;
 use App\Enum\Status;
 use App\Form\InvoiceType;
 use App\Repository\InvoiceRepository;
@@ -19,8 +20,8 @@ final class InvoiceController extends AbstractController
     #[Route(name: 'app_invoice_index', methods: ['GET'])]
     public function index(InvoiceRepository $invoiceRepository): Response
     {
-    $user = $this->getUser();
-    $userId = $user->getId();
+        $user = $this->getUser();
+        $userId = $user->getId();
 
         return $this->render('invoice/index.html.twig', [
             'invoices' => $invoiceRepository->getAllInvoiceWithClientByUser($userId),
@@ -31,7 +32,12 @@ final class InvoiceController extends AbstractController
     public function new(InvoiceRepository $invoiceRepository, Request $request, EntityManagerInterface $entityManager): Response
     {
         $invoice = new Invoice();
-        $invoice->setUserId($this->getUser());
+        $user = $this->getUser();
+        if (!$user instanceof User) {
+            throw $this->createAccessDeniedException();
+        }
+
+        $invoice->setUserId($user);
 
 
         $products = $entityManager->getRepository(Product::class)->findAll();
@@ -51,9 +57,10 @@ final class InvoiceController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $numberByMonth = $invoiceRepository->getNumberInvoiceByMonth((int) date('m')) + 1;
-            $createdAt = "FACT-" . date('Y-m-d') . "-" . $numberByMonth;
-            $invoice->setNumber($createdAt);
+            $invoiceDate = $invoice->getCreatedAt() ?? new \DateTime('now');
+            $count = $invoiceRepository->countInvoicesForUserCurrentMonth($user, $invoiceDate);
+            $number = 'FACT-' . $invoiceDate->format('Y-m-d') . '-' . ($count + 1);
+            $invoice->setNumber($number);
 
             $form->get('saveDump')->isClicked() ? $invoice->setStatus(Status::draft) : $invoice->setStatus(Status::pending_payment);
 
@@ -74,10 +81,15 @@ final class InvoiceController extends AbstractController
 
 
     #[Route('/{id}', name: 'app_invoice_show', methods: ['GET'])]
-    public function show(Invoice $invoice): Response
+    public function show(InvoiceRepository $invoiceRepository, Invoice $invoice): Response
     {
+        $user = $this->getUser();
+        if (!$user instanceof User) {
+            throw $this->createAccessDeniedException();
+        }
+
         return $this->render('invoice/show.html.twig', [
-            'invoice' => $invoice,
+            'invoice' => $invoiceRepository->getInvoiceWithInvoiceItemsAndClient($invoice)
         ]);
     }
 

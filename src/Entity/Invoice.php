@@ -33,7 +33,7 @@ class Invoice
     #[ORM\Column]
     private ?float $total_ttc = null;
 
-    #[ORM\Column]
+    #[ORM\Column(type: 'date')]
     private ?\DateTime $created_at = null;
 
     /**

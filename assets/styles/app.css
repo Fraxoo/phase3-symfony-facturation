@@ -2,7 +2,8 @@
 
 :root {
     --primary-color: #155DFC;
-    --gray: #364153;
+    /* --gray: #364153; */
+    --gray: #5f6672;
     --secondary-gray: #364153;
     --gray-border: rgb(54, 65, 83, 0.2);
     --white: #FFFFFF;
@@ -82,6 +83,9 @@ body {
     border-radius: 0.5rem;
     border: 1px solid var(--gray-border);
     cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
 }
 
 .alert {
@@ -180,4 +184,9 @@ body {
 .invoice-table-cell{
     display: flex;
     justify-content: center;
+}
+
+.invoice-bold {
+    font-weight: bold;
+    font-size: large;
 }

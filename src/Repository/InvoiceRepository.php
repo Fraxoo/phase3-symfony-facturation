@@ -3,7 +3,9 @@
 namespace App\Repository;
 
 use App\Entity\Invoice;
+use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\SecurityBundle\Security;
 
@@ -43,8 +45,7 @@ class InvoiceRepository extends ServiceEntityRepository
     //    }
 
     public function getAllInvoiceWithClientByUser(int $userId): array
-    {
-        ;
+    {;
 
         $query = $this->createQueryBuilder('i')
             ->select('i', 'c')
@@ -57,22 +58,35 @@ class InvoiceRepository extends ServiceEntityRepository
         return $query->getResult();
     }
 
-
-    public function getNumberInvoiceByMonth(int $month): int
+    public function countInvoicesForUserCurrentMonth(User $user, ?\DateTimeInterface $forDate = null): int
     {
-        $start = (new \DateTime('first day of this month'))->setTime(0, 0);
-        $end = (new \DateTime('last day of this month'))->setTime(23, 59, 59);
+        $forDate ??= new \DateTimeImmutable('now');
 
+        $start = new \DateTimeImmutable($forDate->format('Y-m-01'));
+        $next = $start->modify('+1 month');
 
-
-
-        $query = $this->createQueryBuilder('i')
+        return (int) $this->createQueryBuilder('i')
             ->select('COUNT(i.id)')
-            ->where('i.created_at BETWEEN :start AND :end')
-            ->setParameter('start', $start)
-            ->setParameter('end', $end)
-            ->getQuery();
+            ->andWhere('i.user_id = :user')
+            ->andWhere('i.created_at >= :start')
+            ->andWhere('i.created_at < :next')
+            ->setParameter('user', $user)
+            ->setParameter('start', $start, Types::DATE_IMMUTABLE)
+            ->setParameter('next', $next, Types::DATE_IMMUTABLE)
+            ->getQuery()
+            ->getSingleScalarResult();
+    }
 
-        return (int) $query->getSingleScalarResult();
+    public function getInvoiceWithInvoiceItemsAndClient(Invoice $invoice)
+    {
+        return $this->createQueryBuilder('i')
+            ->andWhere('i.id = :invoiceId')
+            ->setParameter('invoiceId', $invoice->getId())
+            ->join('i.client_id', 'c')
+            ->join('i.invoiceItems', 'ii')
+            ->join('ii.product_id', 'p')
+            ->addSelect('c', 'ii', 'p')
+            ->getQuery()
+            ->getOneOrNullResult();
     }
 }

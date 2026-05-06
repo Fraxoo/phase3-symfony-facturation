@@ -13,7 +13,7 @@
         {% for invoice in invoices %}
         <tr class="table-row">
             <td>{{ invoice.number }}</td>
-            <td>{{ invoice.createdAt ? invoice.createdAt|date('Y-m-d H:i:s') : '' }}</td>
+            <td>{{ invoice.createdAt ? invoice.createdAt|date('Y-m-d') : '' }}</td>
             <td>{{ invoice.clientId ? invoice.clientId.name : '' }}</td>
             <td class="table-cell-center">{{ invoice.totalTtc }}</td>
             <td class="table-cell-center">{{ invoice.status.name }}</td>
