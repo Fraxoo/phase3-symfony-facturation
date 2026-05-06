@@ -96,6 +96,11 @@ final class InvoiceController extends AbstractController
     #[Route('/{id}/edit', name: 'app_invoice_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Invoice $invoice, EntityManagerInterface $entityManager): Response
     {
+
+        if ($invoice->getStatus() !== Status::draft) {
+            throw $this->createAccessDeniedException();
+        }
+
         $products = $entityManager->getRepository(Product::class)->findAll();
         $productData = array_values(array_filter(array_map(static function (Product $product): ?array {
             if (null === $product->getId()) {
@@ -128,6 +133,10 @@ final class InvoiceController extends AbstractController
     #[Route('/{id}', name: 'app_invoice_delete', methods: ['POST'])]
     public function delete(Request $request, Invoice $invoice, EntityManagerInterface $entityManager): Response
     {
+        if ($invoice->getStatus() !== Status::draft) {
+            throw $this->createAccessDeniedException();
+        }
+
         if ($this->isCsrfTokenValid('delete' . $invoice->getId(), $request->getPayload()->getString('_token'))) {
             $entityManager->remove($invoice);
             $entityManager->flush();

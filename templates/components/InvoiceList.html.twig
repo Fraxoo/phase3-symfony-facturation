@@ -1,36 +1,39 @@
 <table class="table table-card" {{attributes}}>
-    <thead class="bg-(--background-color) border-b-2 border-black">
-        <tr class="p-4">
-            <th class="py-4">Numéro</th>
-            <th class="py-4">Date</th>
-            <th class="py-4">Client</th>
-            <th class="py-4 table-cell-center">Total TTC</th>
-            <th class="py-4 table-cell-center">Statut</th>
-            <th class="py-4 text-end table-cell-right">actions</th>
-        </tr>
-    </thead>
-    <tbody class="h-">
-        {% for invoice in invoices %}
-        <tr class="table-row">
-            <td>{{ invoice.number }}</td>
-            <td>{{ invoice.createdAt ? invoice.createdAt|date('Y-m-d') : '' }}</td>
-            <td>{{ invoice.clientId ? invoice.clientId.name : '' }}</td>
-            <td class="table-cell-center">{{ invoice.totalTtc }}</td>
-            <td class="table-cell-center">{{ invoice.status.name }}</td>
-            <td class="table-actions flex gap-2 text-(--primary-color)">
-                <a href="{{path('app_invoice_edit' , {'id': invoice.id})}}">
-                    <i class="fa-regular fa-pen-to-square"></i>
-                </a>
-                <a class="flex gap-2 items-center " href="{{ path('app_invoice_show', {'id': invoice.id}) }}">
-                    <i class="fa-solid fa-eye"></i>
-                    <p>Détails</p>
-                </a>
-            </td>
-        </tr>
-        {% else %}
-        <tr>
-            <td colspan="6">no records found</td>
-        </tr>
-        {% endfor %}
-    </tbody>
+	<thead class="bg-(--background-color) border-b-2 border-black">
+		<tr class="p-4">
+			<th class="py-4">Numéro</th>
+			<th class="py-4">Date</th>
+			<th class="py-4">Client</th>
+			<th class="py-4 table-cell-center">Total TTC</th>
+			<th class="py-4 table-cell-center">Statut</th>
+			<th class="py-4 text-end table-cell-right">actions</th>
+		</tr>
+	</thead>
+	<tbody class="h-">
+		{% for invoice in invoices %}
+			<tr class="table-row">
+				<td>{{ invoice.number }}</td>
+				<td>{{ invoice.createdAt ? invoice.createdAt|date('Y-m-d') : '' }}</td>
+				<td>{{ invoice.clientId ? invoice.clientId.name : '' }}</td>
+				<td class="table-cell-center">{{ invoice.totalTtc }}</td>
+				<td class="table-cell-center">{{ invoice.status.value }}</td>
+				<td class="table-actions flex gap-2 text-(--primary-color)">
+					{% if invoice.status.name === 'draft' %}
+						<a href="{{path('app_invoice_edit' , {'id': invoice.id})}}">
+							<i class="fa-regular fa-pen-to-square"></i>
+						</a>
+
+					{% endif %}
+					<a class="flex gap-2 items-center " href="{{ path('app_invoice_show', {'id': invoice.id}) }}">
+						<i class="fa-solid fa-eye"></i>
+						<p>Détails</p>
+					</a>
+				</td>
+			</tr>
+		{% else %}
+			<tr>
+				<td colspan="6">no records found</td>
+			</tr>
+		{% endfor %}
+	</tbody>
 </table>

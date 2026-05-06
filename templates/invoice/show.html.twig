@@ -3,12 +3,11 @@
 {% block title %}Invoice{% endblock %}
 
 {% block body %}
-{{ dump(invoice) }}
 <div class="flex flex-col gap-8 py-8 px-50 h-screen overflow-scroll">
-    <div class="text-(--gray) flex gap-4 items-center">
-        <i class="fa-solid fa-arrow-left"></i>
-        <a href="{{ path('app_invoice_index') }}">Retour au factures</a>
-    </div>
+        <a class="text-(--gray) flex gap-4 items-center" href="{{ path('app_invoice_index') }}">
+            <i class="fa-solid fa-arrow-left"></i>
+            <p>Retour au factures</p>
+        </a>
     <div class="flex items-center justify-between">
         <div>
             <div class="flex gap-4 items-center">
@@ -67,7 +66,7 @@
             </div>
         </div>
 
-        <table class="table table-card">
+        <table class="table table-card shadow-none!">
             <thead class="border-b-2 border-black">
                 <tr class="p-4">
                     <th class="py-4 w-full">Description</th>
@@ -95,7 +94,7 @@
             </tbody>
         </table>
 
-        <div class="flex flex-col ">
+        <div class="flex gap-4 flex-col ">
             <div class="flex justify-end">
                 <div class="w-1/5 flex  flex-col gap-2">
                     <div class="flex justify-between p-2 font-bold border-b-2 border-(--gray-border)">
@@ -111,6 +110,10 @@
             <div class="flex flex-col border-t border-(--gray-border)">
                 <p class="text-xs mt-1 text-end text-(--gray)">TVA non applicable, art. 293 B du CGI</p>
                 <p>Conditions de paiement</p>
+            </div>
+            <div class="flex w-full flex-col gap-2 p-4 rounded-xl  bg-gray-50 border border-gray-100 ">
+                <p class="text-(--gray)">Coordonnées bancaires pour le paiement :</p>
+                <p>{{ invoice.userId.iban }}</p>
             </div>
         </div>
 
