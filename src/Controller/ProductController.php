@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Product;
+use App\Entity\User;
 use App\Form\ProductType;
 use App\Repository\ProductRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -17,8 +18,13 @@ final class ProductController extends AbstractController
     #[Route(name: 'app_product_index', methods: ['GET'])]
     public function index(ProductRepository $productRepository): Response
     {
+        $user = $this->getUser();
+        if (!$user instanceof User) {
+            throw $this->createAccessDeniedException();
+        }
+
         return $this->render('product/index.html.twig', [
-            'products' => $productRepository->findAll(),
+            'products' => $productRepository->findByUser($user),
         ]);
     }
 
@@ -26,6 +32,13 @@ final class ProductController extends AbstractController
     public function new(Request $request, EntityManagerInterface $entityManager): Response
     {
         $product = new Product();
+        $user = $this->getUser();
+        if (!$user instanceof User) {
+            throw $this->createAccessDeniedException();
+        }
+
+        $product->setUserId($user);
+
         $form = $this->createForm(ProductType::class, $product);
         $form->handleRequest($request);
 
@@ -39,13 +52,18 @@ final class ProductController extends AbstractController
         return $this->render('product/new.html.twig', [
             'product' => $product,
             'form' => $form,
-            'products' => $entityManager->getRepository(Product::class)->findAll(),
+            'products' => $entityManager->getRepository(Product::class)->findBy(['user_id' => $user]),
         ]);
     }
 
     #[Route('/{id}', name: 'app_product_show', methods: ['GET'])]
     public function show(Product $product): Response
     {
+        $user = $this->getUser();
+        if (!$user instanceof User || null === $product->getUserId() || $product->getUserId()->getId() !== $user->getId()) {
+            throw $this->createAccessDeniedException();
+        }
+
         return $this->render('product/show.html.twig', [
             'product' => $product,
         ]);
@@ -54,6 +72,11 @@ final class ProductController extends AbstractController
     #[Route('/{id}/edit', name: 'app_product_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Product $product, EntityManagerInterface $entityManager): Response
     {
+        $user = $this->getUser();
+        if (!$user instanceof User || null === $product->getUserId() || $product->getUserId()->getId() !== $user->getId()) {
+            throw $this->createAccessDeniedException();
+        }
+
         $form = $this->createForm(ProductType::class, $product);
         $form->handleRequest($request);
 
@@ -72,6 +95,11 @@ final class ProductController extends AbstractController
     #[Route('/{id}', name: 'app_product_delete', methods: ['POST'])]
     public function delete(Request $request, Product $product, EntityManagerInterface $entityManager): Response
     {
+        $user = $this->getUser();
+        if (!$user instanceof User || null === $product->getUserId() || $product->getUserId()->getId() !== $user->getId()) {
+            throw $this->createAccessDeniedException();
+        }
+
         if ($this->isCsrfTokenValid('delete'.$product->getId(), $request->getPayload()->getString('_token'))) {
             $entityManager->remove($product);
             $entityManager->flush();

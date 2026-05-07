@@ -29,6 +29,10 @@ class Product
     #[ORM\Column(enumType: Unit::class)]
     private ?Unit $unit = null;
 
+    #[ORM\ManyToOne(inversedBy: 'products')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?User $user_id = null;
+
     /**
      * @var Collection<int, InvoiceItem>
      */
@@ -90,6 +94,18 @@ class Product
     public function setUnit(Unit $unit): static
     {
         $this->unit = $unit;
+
+        return $this;
+    }
+
+    public function getUserId(): ?User
+    {
+        return $this->user_id;
+    }
+
+    public function setUserId(?User $user_id): static
+    {
+        $this->user_id = $user_id;
 
         return $this;
     }
