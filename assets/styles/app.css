@@ -77,6 +77,18 @@ body {
     cursor: pointer;
 }
 
+.green-transparent-btn{
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+    background-color: #e6f9f1;
+    border: 1px solid #b6f7d7 ;
+    padding: 0.5rem 1rem;
+    border-radius: 0.5rem;
+    color: #188b06;
+    cursor: pointer;
+}
+
 .white-btn {
     background-color: var(--white);
     padding: 0.5rem 1rem;
