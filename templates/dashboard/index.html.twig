@@ -12,7 +12,7 @@
             </div>
             <div>
                 <p class="text-(--gray)">Chiffre d'affaires (Payé)</p>
-                <p class="font-bold text-2xl">0.00 €</p>
+                <p class="font-bold text-2xl">{{totalPaid ? totalPaid : 0}} €</p>
             </div>
         </div>
         <div class="dashboard-box">
@@ -21,7 +21,7 @@
             </div>
             <div>
                 <p class="text-(--gray)">Factures en attente de paiement</p>
-                <p class="font-bold text-2xl">0</p>
+                <p class="font-bold text-2xl">{{countPending ? countPending : 0}}</p>
             </div>
         </div>
         <div class="dashboard-box">
@@ -30,7 +30,7 @@
             </div>
             <div>
                 <p class="text-(--gray)">Total Clients</p>
-                <p class="font-bold text-2xl">0</p>
+                <p class="font-bold text-2xl">{{totalClient ? totalClient : 0}}</p>
             </div>
         </div>
         <div class="dashboard-box">
@@ -39,7 +39,7 @@
             </div>
             <div>
                 <p class="text-(--gray)">Total Produits</p>
-                <p class="font-bold text-2xl">0</p>
+                <p class="font-bold text-2xl">{{totalProduct ? totalProduct : 0}}</p>
             </div>
         </div>
     </div>
