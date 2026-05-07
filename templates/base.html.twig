@@ -28,7 +28,8 @@
 		{% block content %}
 			{% if app.request.pathInfo != '/login'
     and app.request.pathInfo != '/register'
-    and not (app.request.pathInfo starts with '/mail') %}
+    and not (app.request.pathInfo starts with '/mail')
+	and not (app.request.pathInfo starts with '/invoice/download') %}
 				<twig:NavBar/>
 			{% endif %}
 		{% endblock %}

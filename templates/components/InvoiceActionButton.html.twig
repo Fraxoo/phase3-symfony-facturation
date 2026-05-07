@@ -33,10 +33,10 @@
 
         </form>
         {% else %}
-        <button class=" white-btn ">
+        <a href="{{ path('app_invoice_download', {'id': invoice.id}) }}" download class="white-btn">
             <i class="fa-regular fa-file"></i>
             <p>PDF</p>
-        </button>
+        </a>
         <a class="white-btn " href="{{ path('app_mail', {'id': invoice.id, 'mail': invoice.clientId.email}) }}">
             <i class="fa-regular fa-paper-plane"></i>
             <p>Envoyer</p>

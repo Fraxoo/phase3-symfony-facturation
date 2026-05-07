@@ -24,12 +24,6 @@ final class MailController extends AbstractController
         $tailwindCssPath = $this->getParameter('kernel.project_dir') . '/var/tailwind/app.built.css';
         $tailwindCss = is_string($tailwindCssPath) && is_file($tailwindCssPath) ? (string) file_get_contents($tailwindCssPath) : '';
 
-        // $gotenbergPdfResult = $gotenberg->url()
-        //     ->url('http://localhost:8000/mail/' . $id)
-        //     ->generate();
-
-        //     $httpResult = $gotenbergPdfResult->stream();
-
         $gotenbergPdfResult = $gotenberg->html()
             ->content("mail/index.html.twig", [
                 'invoice' => $invoice,
@@ -45,7 +39,7 @@ final class MailController extends AbstractController
         $email->from("SasFacturation@Johnhardy.com")
             ->to($mail)
             ->subject("Ceci est un mail Test sujet")
-            ->attach($gotenbergPdfResult, "facture.pdf", "application/pdf")
+            ->attach($gotenbergPdfResult, $invoice->getNumber() . '.pdf', "application/pdf")
             ->text("Ceci est un mail Test texte");
 
         $mailer->send($email);

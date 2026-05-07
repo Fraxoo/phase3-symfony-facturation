@@ -4,6 +4,7 @@
 {% endblock %}
 
 {% block body %}
+{{ dump(invoice) }}
 	<div class="flex flex-col gap-8 py-8 px-50 h-screen overflow-scroll">
 		<a class="text-(--gray) flex gap-4 items-center" href="{{ path('app_invoice_index') }}">
 			<i class="fa-solid fa-arrow-left"></i>
