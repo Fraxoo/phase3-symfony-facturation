@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Repository\InvoiceRepository;
 use Sensiolabs\GotenbergBundle\GotenbergPdfInterface;
+use Sensiolabs\GotenbergBundle\Processor\TempfileProcessor;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Mailer\MailerInterface;
@@ -13,12 +14,30 @@ use Symfony\Component\Routing\Attribute\Route;
 final class MailController extends AbstractController
 {
     #[Route('/mail/{id}', name: 'app_mail')]
-    public function index( GotenbergPdfInterface $gotenberg,InvoiceRepository $invoiceRepository, MailerInterface $mailer, int $id): Response
+    public function index(GotenbergPdfInterface $gotenberg, InvoiceRepository $invoiceRepository, MailerInterface $mailer, int $id): Response
     {
+        $invoice = $invoiceRepository->getInvoiceWithInvoiceItemsAndClient($id);
+        if (!$invoice) {
+            throw $this->createNotFoundException();
+        }
 
-        $gotenbergPdfResult = $gotenberg->url()
-            ->url('http://localhost:8000/mail/' . $id)
-            ->generate();
+        $tailwindCssPath = $this->getParameter('kernel.project_dir') . '/var/tailwind/app.built.css';
+        $tailwindCss = is_string($tailwindCssPath) && is_file($tailwindCssPath) ? (string) file_get_contents($tailwindCssPath) : '';
+
+        // $gotenbergPdfResult = $gotenberg->url()
+        //     ->url('http://localhost:8000/mail/' . $id)
+        //     ->generate();
+
+        //     $httpResult = $gotenbergPdfResult->stream();
+
+        $gotenbergPdfResult = $gotenberg->html()
+            ->content("mail/index.html.twig", [
+                'invoice' => $invoice,
+                'tailwindCss' => $tailwindCss,
+            ])
+            ->processor(new TempfileProcessor())
+            ->generate()
+            ->process();
 
 
 
@@ -33,7 +52,8 @@ final class MailController extends AbstractController
 
 
         return $this->render('mail/index.html.twig', [
-            'invoice' => $invoiceRepository->getInvoiceWithInvoiceItemsAndClient($id)
+            'invoice' => $invoice,
+            'tailwindCss' => $tailwindCss,
         ]);
     }
 }
