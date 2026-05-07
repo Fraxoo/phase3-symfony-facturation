@@ -42,10 +42,29 @@
             <p>Envoyer</p>
         </a>
         {% if invoice.status.name === 'pending_payment' %}
-        <button data-action="live#action" data-live-action-param="setStatusPaid" class="green-transparent-btn">
-            <i class="fa-solid fa-euro-sign"></i>
-            <p>Valider le paiement</p>
-        </button>
+        <div data-controller="confirm-modal">
+            <button type="button" class="green-transparent-btn" data-action="click->confirm-modal#open">
+                <i class="fa-solid fa-euro-sign"></i>
+                <p>Valider le paiement</p>
+            </button>
+
+            <dialog data-confirm-modal-target="dialog"
+                data-action="click->confirm-modal#backdropClose cancel->confirm-modal#close"
+                class="p-6 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 rounded-2xl bg-white border border-(--gray-border)">
+                <p class="font-bold mb-4">Valider le paiement ?</p>
+
+                <div class="flex gap-3 justify-end">
+                    <button type="button" class="white-btn" data-action="click->confirm-modal#close">
+                        <p>Non</p>
+                    </button>
+                    <button type="button" class="green-transparent-btn"
+                        data-action="click->confirm-modal#close click->live#action"
+                        data-live-action-param="setStatusPaid">
+                        <p>Oui</p>
+                    </button>
+                </div>
+            </dialog>
+        </div>
         {% endif %}
 
         {% endif %}
