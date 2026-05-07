@@ -57,6 +57,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private Collection $clients;
 
     /**
+     * @var Collection<int, Product>
+     */
+    #[ORM\OneToMany(targetEntity: Product::class, mappedBy: 'user_id')]
+    private Collection $products;
+
+    /**
      * @var Collection<int, Invoice>
      */
     #[ORM\OneToMany(targetEntity: Invoice::class, mappedBy: 'user_id')]
@@ -68,6 +74,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function __construct()
     {
         $this->clients = new ArrayCollection();
+        $this->products = new ArrayCollection();
         $this->invoices = new ArrayCollection();
     }
 
@@ -230,6 +237,35 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
             // set the owning side to null (unless already changed)
             if ($client->getUserId() === $this) {
                 $client->setUserId(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Product>
+     */
+    public function getProducts(): Collection
+    {
+        return $this->products;
+    }
+
+    public function addProduct(Product $product): static
+    {
+        if (!$this->products->contains($product)) {
+            $this->products->add($product);
+            $product->setUserId($this);
+        }
+
+        return $this;
+    }
+
+    public function removeProduct(Product $product): static
+    {
+        if ($this->products->removeElement($product)) {
+            if ($product->getUserId() === $this) {
+                $product->setUserId(null);
             }
         }
 

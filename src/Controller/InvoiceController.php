@@ -10,7 +10,6 @@ use App\Form\InvoiceType;
 use App\Repository\InvoiceRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Sensiolabs\GotenbergBundle\GotenbergPdfInterface;
-use Sensiolabs\GotenbergBundle\Processor\TempfileProcessor;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\HeaderUtils;
 use Symfony\Component\HttpFoundation\Request;
@@ -27,10 +26,12 @@ final class InvoiceController extends AbstractController
         $trueFilter = $filter === 'draft' ? Status::draft : ($filter === 'pending_payment' ? Status::pending_payment : ($filter === 'paid' ? Status::paid : null));
 
         $user = $this->getUser();
-        $userId = $user->getId();
+        if (!$user instanceof User) {
+            throw $this->createAccessDeniedException();
+        }
 
         return $this->render('invoice/index.html.twig', [
-            'invoices' => $invoiceRepository->getAllInvoiceWithClientByUser($userId, $trueFilter),
+            'invoices' => $invoiceRepository->getAllInvoiceWithClientByUser($user->getId(), $trueFilter),
         ]);
     }
 
@@ -46,7 +47,7 @@ final class InvoiceController extends AbstractController
         $invoice->setUserId($user);
 
 
-        $products = $entityManager->getRepository(Product::class)->findAll();
+        $products = $entityManager->getRepository(Product::class)->findBy(['user_id' => $user]);
         $productData = array_values(array_filter(array_map(static function (Product $product): ?array {
             if (null === $product->getId()) {
                 return null;
@@ -68,7 +69,12 @@ final class InvoiceController extends AbstractController
             $number = 'FACT-' . $invoiceDate->format('Y-m-d') . '-' . ($count + 1);
             $invoice->setNumber($number);
 
-            $form->get('saveDump')->isClicked() ? $invoice->setStatus(Status::draft) : $invoice->setStatus(Status::pending_payment);
+            $submittedData = $request->request->all($form->getName());
+            if (array_key_exists('saveDump', $submittedData)) {
+                $invoice->setStatus(Status::draft);
+            } else {
+                $invoice->setStatus(Status::pending_payment);
+            }
 
 
             $entityManager->persist($invoice);
@@ -107,7 +113,12 @@ final class InvoiceController extends AbstractController
             throw $this->createAccessDeniedException();
         }
 
-        $products = $entityManager->getRepository(Product::class)->findAll();
+        $user = $this->getUser();
+        if (!$user instanceof User) {
+            throw $this->createAccessDeniedException();
+        }
+
+        $products = $entityManager->getRepository(Product::class)->findBy(['user_id' => $user]);
         $productData = array_values(array_filter(array_map(static function (Product $product): ?array {
             if (null === $product->getId()) {
                 return null;

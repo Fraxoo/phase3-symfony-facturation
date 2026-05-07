@@ -94,4 +94,22 @@ class InvoiceRepository extends ServiceEntityRepository
             ->getQuery()
             ->getOneOrNullResult();
     }
+
+    public function getTotalPaid(){
+        return $this->createQueryBuilder('i')
+            ->select('SUM(i.total_ttc) as total_paid')
+            ->andWhere('i.status = :status')
+            ->setParameter('status', Status::paid)
+            ->getQuery()
+            ->getSingleScalarResult();
+    }
+
+    public function getCountInvoicePendingPayment(){
+        return $this->createQueryBuilder('i')
+            ->select('COUNT(i.id) as count_pending')
+            ->andWhere('i.status = :status')
+            ->setParameter('status', Status::pending_payment)
+            ->getQuery()
+            ->getSingleScalarResult();
+    }
 }
