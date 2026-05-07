@@ -1,0 +1,53 @@
+<div class="flex items-center justify-between" {{attributes}}>
+    <div>
+        <div class="flex gap-4 items-center">
+            <h1 class="font-bold text-2xl">Facture
+                {{invoice.number}}</h1>
+            <p
+                class="flex gap-2 rounded items-center px-2 py-1 {{ invoice.status.name == 'draft' ? 'bg-gray-100 text-gray-600' : invoice.status.name === 'pending_payment' ? 'bg-orange-100 text-orange-600' : 'bg-green-100 text-green-600' }}">
+                {% if invoice.status.name == 'paid' %}
+                <i class="fa-regular fa-circle-check"></i>
+                {% else %}
+                <i class="fa-regular fa-clock"></i>
+                {% endif %}
+                {{ invoice.status.value }}
+            </p>
+        </div>
+        <p class="text-(--gray)">Date :
+            {{ invoice.createdAt|date('Y-m-d') }}</p>
+    </div>
+    <div class="flex gap-4">
+
+        {% if invoice.status.name === 'draft' %}
+        <button class="green-transparent-btn">
+            <i class="fa-regular fa-file-lines"></i>
+            <p>Valider la facture</p>
+        </button>
+        <form method="post" action="{{ path('app_invoice_delete', {'id': invoice.id}) }}"
+            onsubmit="return confirm('Are you sure you want to delete this item?');">
+            <button class="white-btn">
+                <i class="fa-regular fa-trash-can"></i>
+                <p>Supprimer</p>
+            </button>
+            <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ invoice.id) }}">
+
+        </form>
+        {% else %}
+        <a href="{{ path('app_invoice_download', {'id': invoice.id}) }}" download class="white-btn">
+            <i class="fa-regular fa-file"></i>
+            <p>PDF</p>
+        </a>
+        <a class="white-btn " href="{{ path('app_mail', {'id': invoice.id, 'mail': invoice.clientId.email}) }}">
+            <i class="fa-regular fa-paper-plane"></i>
+            <p>Envoyer</p>
+        </a>
+        {% if invoice.status.name === 'pending_payment' %}
+        <button data-action="live#action" data-live-action-param="setStatusPaid" class="green-transparent-btn">
+            <i class="fa-solid fa-euro-sign"></i>
+            <p>Valider le paiement</p>
+        </button>
+        {% endif %}
+
+        {% endif %}
+    </div>
+</div>

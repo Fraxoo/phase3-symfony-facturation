@@ -9,7 +9,10 @@ use App\Enum\Status;
 use App\Form\InvoiceType;
 use App\Repository\InvoiceRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Sensiolabs\GotenbergBundle\GotenbergPdfInterface;
+use Sensiolabs\GotenbergBundle\Processor\TempfileProcessor;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\HeaderUtils;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -17,7 +20,7 @@ use Symfony\Component\Routing\Attribute\Route;
 #[Route('/invoice')]
 final class InvoiceController extends AbstractController
 {
-    #[Route(name: 'app_invoice_index', methods: ['GET' , 'POST'])]
+    #[Route(name: 'app_invoice_index', methods: ['GET', 'POST'])]
     public function index(Request $request, InvoiceRepository $invoiceRepository): Response
     {
         $filter = $request->query->get('filter');
@@ -92,7 +95,7 @@ final class InvoiceController extends AbstractController
         }
 
         return $this->render('invoice/show.html.twig', [
-            'invoice' => $invoiceRepository->getInvoiceWithInvoiceItemsAndClient($invoice)
+            'invoice' => $invoiceRepository->getInvoiceWithInvoiceItemsAndClient($invoice->getId())
         ]);
     }
 
@@ -146,5 +149,26 @@ final class InvoiceController extends AbstractController
         }
 
         return $this->redirectToRoute('app_invoice_index', [], Response::HTTP_SEE_OTHER);
+    }
+
+
+    #[Route('/download/{id}', name: 'app_invoice_download', methods: ['GET'])]
+    public function download(Request $request, GotenbergPdfInterface $gotenberg, InvoiceRepository $invoiceRepository, int $id)
+    {
+        $invoice = $invoiceRepository->getInvoiceWithInvoiceItemsAndClient($id);
+        if (!$invoice) {
+            throw $this->createNotFoundException();
+        }
+
+        $tailwindCssPath = $this->getParameter('kernel.project_dir') . '/var/tailwind/app.built.css';
+        $tailwindCss = is_string($tailwindCssPath) && is_file($tailwindCssPath) ? (string) file_get_contents($tailwindCssPath) : '';
+
+        return $gotenberg->html()
+            ->content('mail/index.html.twig', [
+                'invoice' => $invoice,
+                'tailwindCss' => $tailwindCss,
+            ])
+            ->fileName($invoice->getNumber(), HeaderUtils::DISPOSITION_ATTACHMENT) // force le download
+            ->generate();
     }
 }

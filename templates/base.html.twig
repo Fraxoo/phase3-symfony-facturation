@@ -11,7 +11,6 @@
 		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 		<link href="https://fonts.googleapis.com/css2?family=Arimo:ital,wght@0,400..700;1,400..700&display=swap" rel="stylesheet">
 		<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text><text y=%221.3em%22 x=%220.2em%22 font-size=%2276%22 fill=%22%23fff%22>sf</text></svg>"> {% block stylesheets %}{% endblock %}
-
 		{% block javascripts %}
 			{% block importmap %}
 				{{ importmap('app') }}
@@ -27,14 +26,14 @@
 	</head>
 	<body class="flex flex-5">
 		{% block content %}
-			{% if app.request.pathInfo != '/login' and app.request.pathInfo != '/register' %}
+			{% if app.request.pathInfo != '/login'
+    and app.request.pathInfo != '/register'
+    and not (app.request.pathInfo starts with '/mail')
+	and not (app.request.pathInfo starts with '/invoice/download') %}
 				<twig:NavBar/>
 			{% endif %}
 		{% endblock %}
-		<div class="flex-5 h-screen">
-		{% block body %}
-
-			{% endblock %}
-		</div>
-	</body>
-</html>
+		<div class="flex-5 h-screen"> {% block body %}{% endblock %}
+			</div>
+		</body>
+	</html>

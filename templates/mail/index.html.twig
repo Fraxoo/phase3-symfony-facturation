@@ -1,0 +1,14 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello MailController!
+{% endblock %}
+
+{% block stylesheets %}
+	<style>
+		{{ tailwindCss|default('')|raw }}
+	</style>
+{% endblock %}
+
+{% block body %}
+	<twig:InvoicePdf invoice="{{ invoice }}"/>
+{% endblock %}
