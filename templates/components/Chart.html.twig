@@ -1,0 +1,19 @@
+<div class="bg-white border  border-(--gray-border) shadow rounded-xl p-6 w-full" {{attributes}}>
+	<div class="flex justify-between items-center">
+		<p class="font-bold text-xl">Ciffres d'affaires mensuel (Factures payées)</p>
+		<select
+			class="white-btn"
+			name="year"
+			id=""
+			data-model="currentYear"
+			data-action="change->live#action"
+			data-live-action-param="changeYear"
+		>
+			{% for year in years %}
+				<option value="{{ year }}" {{ year==currentYear ? 'selected' : '' }}>{{ year }}</option>
+			{% endfor %}
+
+		</select>
+	</div>
+	{{ render_chart(chart) }}
+</div>
