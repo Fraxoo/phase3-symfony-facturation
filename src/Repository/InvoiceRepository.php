@@ -20,26 +20,26 @@ class InvoiceRepository extends ServiceEntityRepository
         parent::__construct($registry, Invoice::class);
     }
 
-    public function getTotalPaidByMonth(User $user, ?\DateTimeInterface $forDate = null): float
-    {
-        $forDate ??= new \DateTimeImmutable('now');
+        public function getTotalPaidByMonth(User $user, ?\DateTimeInterface $forDate = null): float
+        {
+            $forDate ??= new \DateTimeImmutable('now');
 
-        $start = new \DateTimeImmutable($forDate->format('Y-m-01'));
-        $next = $start->modify('+1 month');
+            $start = new \DateTimeImmutable($forDate->format('Y-m-01'));
+            $next = $start->modify('+1 month');
 
-        return (float) $this->createQueryBuilder('i')
-            ->select('SUM(i.total_ttc)')
-            ->andWhere('i.user_id = :user')
-            ->andWhere('i.status = :status')
-            ->andWhere('i.created_at >= :start')
-            ->andWhere('i.created_at < :next')
-            ->setParameter('user', $user)
-            ->setParameter('status', Status::paid)
-            ->setParameter('start', $start, Types::DATE_IMMUTABLE)
-            ->setParameter('next', $next, Types::DATE_IMMUTABLE)
-            ->getQuery()
-            ->getSingleScalarResult();
-    }
+            return (float) $this->createQueryBuilder('i')
+                ->select('SUM(i.total_ttc)')
+                ->andWhere('i.user_id = :user')
+                ->andWhere('i.status = :status')
+                ->andWhere('i.created_at >= :start')
+                ->andWhere('i.created_at < :next')
+                ->setParameter('user', $user)
+                ->setParameter('status', Status::paid)
+                ->setParameter('start', $start, Types::DATE_IMMUTABLE)
+                ->setParameter('next', $next, Types::DATE_IMMUTABLE)
+                ->getQuery()
+                ->getSingleScalarResult();
+        }
 
 
     //    /**
