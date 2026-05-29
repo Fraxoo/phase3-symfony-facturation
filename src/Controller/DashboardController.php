@@ -12,7 +12,7 @@ use App\Repository\InvoiceRepository;
 
 final class DashboardController extends AbstractController
 {
-    #[Route('/dashboard', name: 'app_dashboard')]
+    #[Route('/', name: 'app_dashboard')]
     public function index(ProductRepository $productRepository, ClientRepository $clientRepository, InvoiceRepository $invoiceRepository): Response
     {
         $user = $this->getUser();
