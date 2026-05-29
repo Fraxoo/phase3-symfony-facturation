@@ -1,11 +1,36 @@
-# Cahier des charges
-Lien du Cahier des charges : https://github.com/CHAOUCHI/cdpi-dwwm/blob/phase3-symfony-docker-test/Phase%203%20-%20Symfony%20Docker%20et%20Test/Symfony/Projets/SaaSFacturation/Cahier%20des%20charges.md
+# Facturation (Symfony) — Démarrage avec Docker
 
-## 1. Activé les issues dans le parametre du répo GitHub
+Ce projet est prévu pour tourner via **Docker Compose** (FrankenPHP + Caddy).
 
-## 2. Créer une branche de développement
-- Créer une branche de développement à partir de la branche principale (main ou master) pour travailler sur les nouvelles fonctionnalités et les corrections de bugs sans affecter la branche principale.
+## Prérequis
 
-## 3. Créer des issues pour chaque tâche
-- Créer des issues pour chaque userstory (faite un copié collé des US et de leurs CA en tant que description de l'issue)
-- Démarrer un github Project pour suivre l'avancement des issues (ex: To Do, In Progress, Done)
+- Docker + Docker Compose (`docker compose`)
+
+## Lancer le projet (dev)
+
+Depuis la racine du projet :
+
+```bash
+docker compose up --build --wait
+```
+
+Puis ouvre :
+
+- Application : `http://localhost/` (ou `https://localhost/`)
+- Mailpit (emails) : `http://localhost:8025/`
+- Gotenberg (PDF) : `http://localhost:3000/`
+
+> Remarque : en HTTPS, ton navigateur peut afficher un avertissement (certificat local).
+
+## Arrêter
+
+```bash
+docker compose down
+```
+
+Pour supprimer aussi les volumes (reset complet, données incluses) :
+
+```bash
+docker compose down -v
+```
+
